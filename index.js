@@ -13,7 +13,7 @@ functions overview
     addProductToCart        (dtb, args, callback(err, cart))
     removeProductFromCart   (dtb, args, callback(err, cart))
     deleteCart              (dtb, args, callback(err, cart))
-    checkoutCart            (dtb, args, callback(err))
+    checkoutCart            (dtb, args, callback(err, cart))
 
     readReceipt             (dtb, args, callback(err, data))
     confirmReceipt          (dtb, args, callback(err, changes))
@@ -34,6 +34,7 @@ function parameters
             (id || email || created_at || created_by)
         value - variable containing the value to search for
             ${varies}
+        cart - array object containing 
 
     callback - executed upon completion of the package function
         err - null if successful, object if function failed
@@ -472,8 +473,21 @@ module.exports = {
 
 
     /*
-            Authentication user functions - BEGIN
+            Cart Management functions - BEGIN
     */
+    addProductToCart: async (dtb, args, callback) => {
+        // (err, cart)
+    },
+    removeProductFromCart: async (dtb, args, callback) => {
+        // (err, cart)
+    },
+    deleteCart: async (dtb, args, callback) => {
+        // (err, cart)
+    },
+    checkoutCart: async (dtb, args, callback) => {
+        // (err, cart)
+    },
+
     loginUser: async (dtb, args, callback) => {
         await tryCreateTables(dtb);
 
@@ -597,7 +611,7 @@ module.exports = {
         });
     },
     /*
-            Authentication user functions - END
+            Cart Management functions - END
     */
     /*
         functionName: async (dtb, args, callback) => { } - END
