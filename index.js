@@ -476,6 +476,29 @@ module.exports = {
             Cart Management functions - BEGIN
     */
     addProductToCart: async (dtb, args, callback) => {
+        return new Promise((resolve) => {
+            try {
+
+                if (
+                    args == undefined ||
+                    args.product == undefined ||
+                    args.product.sku == undefined ||
+                    args.product.name == undefined ||
+                    args.product.price == undefined ||
+                    args.cart == undefined
+                ) {
+
+                } else {
+                    // add to cart
+
+
+                }
+            } catch (err) {
+                callback(err)
+                resolve()
+            }
+
+        })
         // (err, cart)
     },
     removeProductFromCart: async (dtb, args, callback) => {
