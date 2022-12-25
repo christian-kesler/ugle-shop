@@ -64,27 +64,24 @@ async function tryCreateTables(dtb) {
         try {
             dtb.exec(
                 `CREATE TABLE IF NOT EXISTS products(
-                'sku' VARCHAR(255) PRIMARY KEY UNIQUE,
+                'sku' INTEGER PRIMARY KEY UNIQUE,
                 'name' VARCHAR(255),
                 'price' VARCHAR(255),
                 'description_short' VARCHAR(255),
                 'description_long' TEXT,
-                'image_alpha' TEXT,
-                'image_beta' TEXT,
-                'image_gamma' TEXT,
-                'image_delta' TEXT,
+                'images' TEXT,
                 'created_at' DATETIME,
                 'created_by' VARCHAR(255)
                 );`
             );
             dtb.exec(
                 `CREATE TABLE IF NOT EXISTS receipts(
-                'id' PRIMARY KEY AUTOINCREMENT UNIQUE,
+                'id' INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 'cart' TEXT,
                 'created_at' DATETIME,
-                'created_by' VARCHAR(255)
+                'created_by' VARCHAR(255),
                 'confirmed_at' DATETIME,
-                'confirmed_by' VARCHAR(255)
+                'confirmed_by' VARCHAR(255),
                 'rejected_at' DATETIME,
                 'rejected_by' VARCHAR(255)
                 );`
@@ -186,8 +183,6 @@ module.exports = {
     */
 
 
-
-
     /*
             CRUD product functions - BEGIN
     */
@@ -200,65 +195,124 @@ module.exports = {
 
                 tryCreateTables(dtb);
 
-                if (!allValuesAreStrings(args)) {
+                // verifying argument structure
+                if (args.params === undefined) {
                     callback({
-                        message: 'non-string values detected'
+                        message: 'params is undefined'
+                    });
+                    resolve();
+                } else if (args.params.sku === undefined) {
+                    callback({
+                        message: 'params.sku is undefined'
+                    });
+                    resolve();
+                } else if (args.params.name === undefined) {
+                    callback({
+                        message: 'params.name is undefined'
+                    });
+                    resolve();
+                } else if (args.params.price === undefined) {
+                    callback({
+                        message: 'params.price is undefined'
+                    });
+                    resolve();
+                } else if (args.params.description_short === undefined) {
+                    callback({
+                        message: 'params.description_short is undefined'
+                    });
+                    resolve();
+                } else if (args.params.description_long === undefined) {
+                    callback({
+                        message: 'params.description_long is undefined'
+                    });
+                    resolve();
+                } else if (args.params.images === undefined) {
+                    callback({
+                        message: 'params.images is undefined'
+                    });
+                    resolve();
+                } else if (args.params.created_at === undefined) {
+                    callback({
+                        message: 'params.created_at is undefined'
+                    });
+                    resolve();
+                } else if (args.params.created_by === undefined) {
+                    callback({
+                        message: 'params.created_by is undefined'
+                    });
+                    resolve();
+                    // type validation
+
+
+                } else if (typeof args.params != 'object') {
+                    callback({
+                        message: `params must be object, received ${typeof args.params}`
+                    });
+                    resolve();
+                } else if (typeof args.params.sku != 'number') {
+                    callback({
+                        message: `params.sku must be number, received ${typeof args.params.sku}`
+                    });
+                    resolve();
+                } else if (typeof args.params.name != 'string') {
+                    callback({
+                        message: `params.name must be string, received ${typeof args.params.name}`
+                    });
+                    resolve();
+                } else if (typeof args.params.price != 'number') {
+                    callback({
+                        message: `params.price must be number, received ${typeof args.params.price}`
+                    });
+                    resolve();
+                } else if (typeof args.params.description_short != 'string') {
+                    callback({
+                        message: `params.description_short must be string, received ${typeof args.params.description_short}`
+                    });
+                    resolve();
+                } else if (typeof args.params.description_long != 'string') {
+                    callback({
+                        message: `params.description_long must be string, received ${typeof args.params.description_long}`
+                    });
+                    resolve();
+                } else if (typeof args.params.images != 'string') {
+                    callback({
+                        message: `params.images must be string, received ${typeof args.params.images}`
+                    });
+                    resolve();
+                } else if (typeof args.params.created_at != 'string') {
+                    callback({
+                        message: `params.created_at must be string, received ${typeof args.params.created_at}`
+                    });
+                    resolve();
+                } else if (typeof args.params.created_by != 'string') {
+                    callback({
+                        message: `params.created_by must be string, received ${typeof args.params.created_by}`
                     });
                     resolve();
                 } else {
 
-                    if (
-                        args.params === undefined ||
-                        args.params.sku === undefined ||
-                        args.params.name === undefined ||
-                        args.params.price === undefined ||
-                        args.params.description_short === undefined ||
-                        args.params.description_long === undefined ||
-                        args.params.images === undefined ||
-                        args.params.created_at === undefined ||
-                        args.params.created_by === undefined
-                    ) {
+                    dtb.run(`INSERT INTO products(sku, name, price, description_short, description_long, images, created_at, created_by) VALUES(?, ?, ?, ?, ?, ?, ?, ?);`, [
+                        args.params.sku,
+                        args.params.name,
+                        args.params.price,
+                        args.params.description_short,
+                        args.params.description_long,
+                        JSON.stringify(args.params.images),
+                        args.params.created_at,
+                        args.params.created_by,
+                    ], (err) => {
+                        if (err) {
 
-                        callback({
-                            message: 'missing args'
-                        });
-                        resolve();
-
-                    } else {
-
-                        if (!validSku(args.params.sku)) {
-                            callback({
-                                message: 'invalid sku'
-                            });
+                            callback(err);
                             resolve();
 
                         } else {
 
-                            dtb.run(`INSERT INTO products(sku, name, price, description_short, description_long, images, created_at, created_by) VALUES(?, ?, ?, ?, ?, ?, ?, ?);`, [
-                                args.params.sku,
-                                args.params.name,
-                                args.params.price,
-                                args.params.description_short,
-                                args.params.description_long,
-                                JSON.stringify(args.params.images),
-                                args.params.created_at,
-                                args.params.created_by,
-                            ], (err) => {
-                                if (err) {
+                            callback(null);
+                            resolve();
 
-                                    callback(err);
-                                    resolve();
-
-                                } else {
-
-                                    callback(null);
-                                    resolve();
-
-                                }
-                            });
                         }
-
-                    }
+                    });
                 }
 
             } catch (err) {
@@ -341,65 +395,67 @@ module.exports = {
             try {
 
                 if (!allValuesAreStrings(args)) {
+
                     callback({
                         message: 'non-string values detected'
                     });
                     resolve();
+
+                } else if (args.field === undefined ||
+                    args.params === undefined ||
+                    args.params.data === undefined ||
+                    args.key === undefined ||
+                    args.value === undefined
+                ) {
+
+                    callback({
+                        message: 'missing args'
+                    });
+                    resolve();
+
                 } else {
 
-                    if (args.field === undefined ||
-                        args.params === undefined ||
-                        args.params.data === undefined ||
-                        args.key === undefined ||
-                        args.value === undefined
-                    ) {
+                    dtb.run(`UPDATE products SET ${args.field} = ? WHERE ${args.key} = ?;`, [args.params.data, args.value], async function (err) {
+                        if (err) {
 
-                        callback({
-                            message: 'missing args'
-                        });
-                        resolve();
+                            callback({
+                                message: err.message,
+                            });
+                            resolve();
+                        } else if (this.changes == 0) {
 
-                    } else {
+                            callback(
+                                {
+                                    message: `Row(s) affected: ${this.changes}`
+                                },
+                                {
+                                    count: this.changes,
+                                    message: `Row(s) affected: ${this.changes}`
+                                }
+                            );
+                            resolve();
+                        } else {
 
-                        dtb.run(`UPDATE products SET ${args.field} = ? WHERE ${args.key} = ?;`, [args.params.data, args.value], async function (err) {
-                            if (err) {
+                            callback(
+                                null,
+                                {
+                                    count: this.changes,
+                                    message: `Row(s) affected: ${this.changes}`
+                                }
+                            );
+                            resolve();
+                        }
+                    });
 
-                                callback({
-                                    message: err.message,
-                                });
-                                resolve();
-                            } else if (this.changes == 0) {
-
-                                callback(
-                                    {
-                                        message: `Row(s) affected: ${this.changes}`
-                                    },
-                                    {
-                                        count: this.changes,
-                                        message: `Row(s) affected: ${this.changes}`
-                                    }
-                                );
-                                resolve();
-                            } else {
-
-                                callback(
-                                    null,
-                                    {
-                                        count: this.changes,
-                                        message: `Row(s) affected: ${this.changes}`
-                                    }
-                                );
-                                resolve();
-                            }
-                        });
-                    }
                 }
+
             } catch (err) {
 
                 callback({
                     message: err.message
                 });
                 resolve();
+
             }
         });
     },
@@ -410,54 +466,56 @@ module.exports = {
         return new Promise((resolve) => {
             try {
                 if (!allValuesAreStrings(args)) {
+
                     callback({
                         message: 'non-string values detected'
                     });
                     resolve();
+
+                } else if (
+                    args.key === undefined ||
+                    args.value === undefined
+                ) {
+
+                    callback({
+                        message: 'missing args'
+                    });
+                    resolve();
+
                 } else {
 
-                    if (args.key === undefined ||
-                        args.value === undefined
-                    ) {
-                        callback({
-                            message: 'missing args'
-                        });
-                        resolve();
+                    dtb.run(`DELETE FROM products WHERE ${args.key} = ?;`, [args.value], async function (err) {
+                        if (err) {
 
-                    } else {
+                            callback({
+                                message: err.message,
+                            });
+                            resolve();
+                        } else if (this.changes == 0) {
 
-                        dtb.run(`DELETE FROM products WHERE ${args.key} = ?;`, [args.value], async function (err) {
-                            if (err) {
+                            callback(
+                                {
+                                    message: `Row(s) affected: ${this.changes}`
+                                },
+                                {
+                                    count: this.changes,
+                                    message: `Row(s) affected: ${this.changes}`
+                                }
+                            );
+                            resolve();
+                        } else {
 
-                                callback({
-                                    message: err.message,
-                                });
-                                resolve();
-                            } else if (this.changes == 0) {
+                            callback(
+                                null,
+                                {
+                                    count: this.changes,
+                                    message: `Row(s) affected: ${this.changes}`
+                                }
+                            );
+                            resolve();
+                        }
+                    });
 
-                                callback(
-                                    {
-                                        message: `Row(s) affected: ${this.changes}`
-                                    },
-                                    {
-                                        count: this.changes,
-                                        message: `Row(s) affected: ${this.changes}`
-                                    }
-                                );
-                                resolve();
-                            } else {
-
-                                callback(
-                                    null,
-                                    {
-                                        count: this.changes,
-                                        message: `Row(s) affected: ${this.changes}`
-                                    }
-                                );
-                                resolve();
-                            }
-                        });
-                    }
                 }
             } catch (err) {
 
@@ -465,6 +523,7 @@ module.exports = {
                     message: err.message
                 });
                 resolve();
+
             }
         });
     },
@@ -553,215 +612,3 @@ module.exports = {
 /*
     Public Functions - END
 */
-
-
-
-
-
-
-
-
-
-module.exports = {
-
-    createProduct: (dtb, fields) => {
-
-        /* fields object
-        
-        var fields = {
-            sku: "",
-            name: "",
-            price: "",
-            description_short: "",
-            description_long: "",
-            image_alpha: "",
-            image_beta: "",
-            image_gamma: "",
-            image_delta: "",
-            created_at: "",
-            created_by: "",
-        }
-        
-        */
-        return new Promise(async (resolve) => {
-
-            functionBegin('createProduct', dtb);
-
-            await dtb.run('INSERT INTO products(sku, name, price, description_short, description_long, image_alpha, image_beta, image_gamma, image_delta, created_at, created_by) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);', [
-                fields.sku,
-                fields.name,
-                fields.price,
-                fields.description_short,
-                fields.description_long,
-                fields.image_alpha,
-                fields.image_beta,
-                fields.image_gamma,
-                fields.image_delta,
-                fields.created_at,
-                fields.created_by,
-            ], (err) => {
-                if (err) {
-                    console.log(err.message);
-
-                    functionEnd('createProduct');
-                    resolve('createProduct-failed');
-                } else {
-                    functionEnd('createProduct');
-                    resolve('createProduct-successful');
-                }
-            });
-        });
-    },
-
-    deleteProduct: (dtb, sku) => {
-
-        return new Promise(async (resolve) => {
-
-            functionBegin('deleteProduct', dtb);
-
-            await dtb.run(`DELETE FROM products WHERE sku = ${sku};`, [], (err) => {
-                if (err) {
-                    console.log(err.message);
-
-                    functionEnd('deleteProduct');
-                    resolve({
-                        'redirect': 'deleteProduct-failed'
-                    });
-                } else {
-                    functionEnd('deleteProduct');
-                    resolve({
-                        'redirect': 'deleteProduct-successful'
-                    });
-                }
-            });
-        });
-    },
-
-    findProductBySku: (dtb, sku) => {
-
-        return new Promise(async (resolve) => {
-
-            functionBegin('findProductBySku', dtb);
-
-            await dtb.get(`SELECT * FROM products WHERE sku = '${sku}'`, [], (err, row) => {
-                if (err) {
-                    console.log(err.message);
-
-                    functionEnd('findProductBySku');
-                    resolve({
-                        'redirect': 'findProductBySku-failed',
-                        'data': null
-                    });
-                } else {
-                    if (row.sku != undefined) {
-
-                        functionEnd('findProductBySku');
-                        resolve({
-                            'redirect': 'findProductBySku-successful',
-                            'data': row
-                        });
-                    } else {
-
-                        functionEnd('findProductBySku');
-                        resolve({
-                            'redirect': 'findProductBySku-failed',
-                            'data': null
-                        });
-                    }
-                }
-            });
-        });
-    },
-
-    addToCart: (dtb, sku, quantity, cart) => {
-
-        functionBegin('addToCart', dtb);
-
-        return new Promise(async (resolve) => {
-
-            var product = await this.findProductBySku(sku);
-
-            if (product.data == null) {
-                resolve(product);
-            } else {
-                var found = false;
-
-                if (Array.isArray(cart)) {
-                    cart.forEach((item) => {
-                        if (item.sku == sku) {
-                            found = true;
-                            item.quantity == item.quantity + quantity;
-                        }
-                    });
-
-                    if (found == true) {
-
-                        functionEnd('addToCart');
-                        resolve({
-                            'redirect': 'addToCart-successful',
-                            'data': cart,
-                            'code': 'item-quantity-updated'
-                        });
-                    } else {
-                        cart.push({
-                            'sku': product.sku,
-                            'name': product.name,
-                            'price': product.price,
-                            'quantity': quantity
-                        });
-
-                        functionEnd('addToCart');
-                        resolve({
-                            'redirect': 'addToCart-successful',
-                            'data': cart,
-                            'code': 'new-item-added'
-                        });
-                    }
-                } else {
-                    cart = [];
-
-                    cart.push({
-                        'sku': product.sku,
-                        'name': product.name,
-                        'price': product.price,
-                        'quantity': quantity
-                    });
-
-                    functionEnd('addToCart');
-                    resolve({
-                        'redirect': 'addToCart-successful',
-                        'data': cart,
-                        'code': 'new-cart-created'
-                    });
-                }
-            }
-
-        });
-
-    },
-
-    listProducts: (dtb) => {
-
-        return new Promise(async (resolve) => {
-
-            await dtb.all('SELECT * FROM products', [], (err, rows) => {
-                if (err) {
-                    console.log(err.message);
-
-                    functionEnd('listProducts');
-                    resolve({
-                        'redirect': 'listProducts-failed',
-                        'data': null
-                    });
-                } else {
-                    functionEnd('listProducts');
-                    resolve({
-                        'redirect': 'listProducts-successful',
-                        'data': rows
-                    });
-                }
-            });
-        });
-    },
-
-};
