@@ -66,7 +66,7 @@ async function tryCreateTables(dtb) {
                 `CREATE TABLE IF NOT EXISTS products(
                 'sku' INTEGER PRIMARY KEY UNIQUE,
                 'name' VARCHAR(255),
-                'price' VARCHAR(255),
+                'price' INTEGER,
                 'description_short' VARCHAR(255),
                 'description_long' TEXT,
                 'images' TEXT,
@@ -187,7 +187,7 @@ module.exports = {
             CRUD product functions - BEGIN
     */
     createProduct: async (dtb, args, callback) => {
-        // TODO testing
+        // Testing Complete
         await tryCreateTables(dtb);
 
         return new Promise((resolve) => {
@@ -201,6 +201,13 @@ module.exports = {
                         message: 'params is undefined'
                     });
                     resolve();
+                } else if (typeof args.params != 'object') {
+                    callback({
+                        message: `params must be object, received ${typeof args.params}`
+                    });
+                    resolve();
+
+
                 } else if (args.params.sku === undefined) {
                     callback({
                         message: 'params.sku is undefined'
@@ -244,11 +251,6 @@ module.exports = {
                     // type validation
 
 
-                } else if (typeof args.params != 'object') {
-                    callback({
-                        message: `params must be object, received ${typeof args.params}`
-                    });
-                    resolve();
                 } else if (typeof args.params.sku != 'number') {
                     callback({
                         message: `params.sku must be number, received ${typeof args.params.sku}`
@@ -581,16 +583,14 @@ module.exports = {
     /*
         functionName: async (dtb, callback) => { } - BEGIN
     */
-    allUsers: async (dtb, callback) => {
+    allProducts: async (dtb, callback) => {
         await tryCreateTables(dtb);
 
         return new Promise((resolve) => {
             try {
-                dtb.all('SELECT * FROM auth;', [], (err, rows) => {
+                dtb.all('SELECT * FROM products;', [], (err, rows) => {
                     if (err) {
-                        callback({
-                            message: err.message
-                        });
+                        callback(err);
                         resolve();
                     } else {
                         callback(null, rows);
@@ -598,9 +598,7 @@ module.exports = {
                     }
                 });
             } catch (err) {
-                callback({
-                    message: err.message
-                });
+                callback(err);
                 resolve();
             }
         });
