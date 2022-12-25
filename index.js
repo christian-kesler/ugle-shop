@@ -192,7 +192,7 @@ module.exports = {
             CRUD product functions - BEGIN
     */
     createProduct: async (dtb, args, callback) => {
-        // Testing Completed
+        // TODO testing
         await tryCreateTables(dtb);
 
         return new Promise((resolve) => {
@@ -214,6 +214,7 @@ module.exports = {
                         args.params.price === undefined ||
                         args.params.description_short === undefined ||
                         args.params.description_long === undefined ||
+                        args.params.images === undefined ||
                         args.params.created_at === undefined ||
                         args.params.created_by === undefined
                     ) {
@@ -233,20 +234,19 @@ module.exports = {
 
                         } else {
 
-                            dtb.run(`INSERT INTO products(sku, name, price, description_short, description_long, created_at, created_by) VALUES(?, ?, ?, ?, ?, ?, ?);`, [
+                            dtb.run(`INSERT INTO products(sku, name, price, description_short, description_long, images, created_at, created_by) VALUES(?, ?, ?, ?, ?, ?, ?, ?);`, [
                                 args.params.sku,
                                 args.params.name,
                                 args.params.price,
                                 args.params.description_short,
                                 args.params.description_long,
+                                JSON.stringify(args.params.images),
                                 args.params.created_at,
-                                args.params.created_by
+                                args.params.created_by,
                             ], (err) => {
                                 if (err) {
 
-                                    callback({
-                                        message: err.message
-                                    });
+                                    callback(err);
                                     resolve();
 
                                 } else {
@@ -262,14 +262,13 @@ module.exports = {
                 }
 
             } catch (err) {
-                callback({
-                    message: 'CATCH ERROR ' + err.message
-                });
+                callback(err);
                 resolve();
             }
         });
     },
     readProduct: async (dtb, args, callback) => {
+        // TODO testing
         await tryCreateTables(dtb);
 
         return new Promise((resolve) => {
@@ -335,6 +334,7 @@ module.exports = {
         });
     },
     updateProduct: async (dtb, args, callback) => {
+        // TODO testing
         await tryCreateTables(dtb);
 
         return new Promise((resolve) => {
@@ -404,6 +404,7 @@ module.exports = {
         });
     },
     deleteProduct: async (dtb, args, callback) => {
+        // TODO testing
         await tryCreateTables(dtb);
 
         return new Promise((resolve) => {
@@ -510,129 +511,6 @@ module.exports = {
     checkoutCart: async (dtb, args, callback) => {
         // (err, cart)
     },
-
-    loginUser: async (dtb, args, callback) => {
-        await tryCreateTables(dtb);
-
-        return new Promise((resolve) => {
-            try {
-
-                if (!allValuesAreStrings(args.login_params)) {
-                    callback({
-                        message: 'non-string values detected'
-                    });
-                    resolve();
-                } else {
-
-                    if (args.login_params === undefined ||
-                        args.login_params.email === undefined ||
-                        args.login_params.password === undefined ||
-                        args.login_params.salt === undefined ||
-                        args.session === undefined
-                    ) {
-                        callback({
-                            message: 'missing args'
-                        });
-                        resolve();
-
-                    } else {
-
-                        if (!validEmail(args.login_params.email)) {
-                            callback({
-                                message: 'invalid email'
-                            });
-                            resolve();
-                        } else {
-                            if (!validPassword(args.login_params.password)) {
-                                callback({
-                                    message: 'invalid password'
-                                });
-                                resolve();
-                            } else {
-                                if (typeof args.session != 'object' || args.session == null || args.session == undefined || Array.isArray(args.session)) {
-                                    callback({
-                                        message: 'session must be object'
-                                    });
-                                    resolve();
-                                } else {
-
-                                    dtb.all('SELECT * FROM auth WHERE email = ?;', [
-                                        args.login_params.email
-                                    ], (err, rows) => {
-                                        if (err) {
-                                            callback({
-                                                message: err.message
-                                            });
-                                            resolve();
-                                        } else if (rows[0] == undefined) {
-                                            callback({
-                                                message: 'credentials failed'
-                                            });
-                                            resolve();
-                                        } else {
-                                            if (hash(args.login_params.password, args.login_params.salt) != rows[0].hash) {
-                                                callback({
-                                                    message: 'credentials failed'
-                                                });
-                                                resolve();
-                                            } else {
-                                                args.session.email = rows[0].email;
-                                                args.session.id = rows[0].id;
-
-                                                callback(null, args.session);
-                                                resolve();
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        }
-                    }
-                }
-            } catch (err) {
-                callback({
-                    message: err.message
-                });
-                resolve();
-            }
-        });
-    },
-    logoutUser: async (args, callback) => {
-        return new Promise((resolve) => {
-            try {
-
-                if (args.session === undefined) {
-                    callback({
-                        message: 'missing args'
-                    });
-                    resolve();
-
-                } else {
-
-                    if (typeof args.session != 'object' || Array.isArray(args.session) || args.session == null) {
-                        callback({
-                            message: 'session is not an object'
-                        });
-                        resolve();
-                    } else {
-                        for (const key in args.session) {
-                            delete args.session[key];
-                        }
-                        // args.session.loggedIn = false
-
-                        callback(null, args.session);
-                        resolve();
-                    }
-                }
-
-            } catch (err) {
-                callback({
-                    message: err.message
-                });
-                resolve();
-            }
-        });
-    },
     /*
             Cart Management functions - END
     */
@@ -675,21 +553,6 @@ module.exports = {
 /*
     Public Functions - END
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
