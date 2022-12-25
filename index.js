@@ -332,52 +332,66 @@ module.exports = {
 
                 tryCreateTables(dtb);
 
-                if (!allValuesAreStrings(args)) {
+                if (args.fields === undefined) {
                     callback({
-                        message: 'non-string values detected'
+                        message: 'fields is undefined'
                     });
                     resolve();
+                } else if (typeof args.fields != 'string') {
+                    callback({
+                        message: `fields must be string, received ${typeof args.fields}`
+                    });
+                    resolve();
+                } else if (args.key === undefined) {
+                    callback({
+                        message: 'key is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.key != 'string') {
+                    callback({
+                        message: `key must be string, received ${typeof args.key}`
+                    });
+                    resolve();
+                } else if (args.value === undefined) {
+                    callback({
+                        message: 'value is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.value != 'string' && typeof args.value != 'number') {
+                    callback({
+                        message: `value must be string, received ${typeof args.value}`
+                    });
+                    resolve();
+
                 } else {
 
-                    if (args.fields === undefined ||
-                        args.key === undefined ||
-                        args.value === undefined
-                    ) {
+                    dtb.all(
+                        `SELECT ${args.fields} FROM products WHERE ${args.key} = ?;`,
+                        [args.value],
+                        (err, rows) => {
+                            if (err) {
 
-                        callback({
-                            message: 'missing args'
-                        });
-                        resolve();
+                                callback({
+                                    message: err.message
+                                });
+                                resolve();
 
-                    } else {
+                            } else if (rows.length == 0) {
 
-                        dtb.all(
-                            `SELECT ${args.fields} FROM products WHERE ${args.key} = ?;`,
-                            [args.value],
-                            (err, rows) => {
-                                if (err) {
+                                callback({
+                                    message: 'entry not found'
+                                });
+                                resolve();
 
-                                    callback({
-                                        message: err.message
-                                    });
-                                    resolve();
+                            } else {
 
-                                } else if (rows.length == 0) {
+                                callback(null, rows);
+                                resolve();
 
-                                    callback({
-                                        message: 'entry not found'
-                                    });
-                                    resolve();
-
-                                } else {
-
-                                    callback(null, rows);
-                                    resolve();
-
-                                }
                             }
-                        );
-                    }
+                        }
+                    );
+
                 }
             } catch (err) {
 
