@@ -670,615 +670,113 @@ const ugle_cart = require('./index.js');
         },
         {
             'fields': 'sku, name, price',
-            'key': 'name',
-            'value': 'Super Potion'
-        },
-        // strings
-        {
-            'fields': 'sku, name, price',
             'key': 'sku',
             'value': '654321'
         },
 
-        {
-            'params': {
-                'sku': '654321',
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': '599.99',
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
+        // strings
 
         // integers
         {
-            'params': 8
+            'fields': 8,
+            'key': 'sku',
+            'value': 654321
         },
         {
-            'params': {
-                'sku': 654321,
-                'name': 8,
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
+            'fields': 'sku, name, price',
+            'key': 8,
+            'value': 'Super Potion'
         },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 8,
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 8,
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': 8,
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': 8,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 8
-            }
-        },
+
         // objects
         {
-            'params': {}
+            'fields': {},
+            'key': 'sku',
+            'value': 654321
         },
         {
-            'params': {
-                'sku': {},
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
+            'fields': 'sku, name, price',
+            'key': {},
+            'value': 'Super Potion'
         },
         {
-            'params': {
-                'sku': 654321,
-                'name': {},
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': {},
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': {},
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': {},
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': {},
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': {},
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': {}
-            }
+            'fields': 'sku, name, price',
+            'key': 'sku',
+            'value': {}
         },
 
         // arrays
         {
-            'params': []
+            'fields': [],
+            'key': 'sku',
+            'value': 654321
         },
         {
-            'params': {
-                'sku': [],
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
+            'fields': 'sku, name, price',
+            'key': [],
+            'value': 'Super Potion'
         },
         {
-            'params': {
-                'sku': 654321,
-                'name': [],
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': [],
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': [],
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': [],
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': [],
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': [],
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': []
-            }
+            'fields': 'sku, name, price',
+            'key': 'sku',
+            'value': []
         },
 
         // null
         {
-            'params': null
+            'fields': null,
+            'key': 'sku',
+            'value': 654321
         },
         {
-            'params': {
-                'sku': null,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
+            'fields': 'sku, name, price',
+            'key': null,
+            'value': 'Super Potion'
         },
         {
-            'params': {
-                'sku': 654321,
-                'name': null,
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
+            'fields': 'sku, name, price',
+            'key': 'sku',
+            'value': null
         },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': null,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': null,
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': null,
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': null,
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': null,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': null
-            }
-        },
+
         // undefined
         {
-            'params': undefined
+            'fields': undefined,
+            'key': 'sku',
+            'value': 654321
         },
         {
-            'params': {
-                'sku': undefined,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
+            'fields': 'sku, name, price',
+            'key': undefined,
+            'value': 'Super Potion'
         },
         {
-            'params': {
-                'sku': 654321,
-                'name': undefined,
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
+            'fields': 'sku, name, price',
+            'key': 'sku',
+            'value': undefined
         },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': undefined,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': undefined,
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': undefined,
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': undefined,
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': undefined,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': undefined
-            }
-        },
+
         // absent
         {
+
+            'key': 'sku',
+            'value': 654321
         },
         {
-            'params': {
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
+            'fields': 'sku, name, price',
+
+            'value': 'Super Potion'
         },
         {
-            'params': {
-                'sku': 654321,
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'created_at': `${new Date}`,
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_by': 'the ugle-cart testing script'
-            }
-        },
-        {
-            'params': {
-                'sku': 654321,
-                'name': 'Super Potion',
-                'price': 599.99,
-                'description_short': 'Something to help your pokemon heal',
-                'description_long': 'A powerful potion that can heal your pokemon up to 50 hit points.  Does not restore PP, does not cure status conditions, only restores hp.  ',
-                'images': '["just pretend that this is a base64 image string","keep pretending on this one too"]',
-                'created_at': `${new Date}`,
-            }
+            'fields': 'sku, name, price',
+            'key': 'sku',
+
         },
 
     ];
     for (let i = 0; i < args.length; i++) {
         await ugle_cart.readProduct(dtb, args[i], (err) => {
-            if (i <= 0) {
+            if (i <= 1) {
                 if (err) {
                     console.log(`[ ] UNEXPECTED FAIL | readProduct[${i}] | ${err.message}`);
                 } else {
