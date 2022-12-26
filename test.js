@@ -4,6 +4,7 @@ const ugle_cart = require('./index.js');
  
     If the package is functioning as it should, the entirety of the terminal output from this program will begin with [X].
 */
+var err_count = 0;
 
 
 
@@ -14,6 +15,7 @@ const ugle_cart = require('./index.js');
         ugle_cart.initDtb('./test.db', (err, dtb) => {
             if (err) {
                 console.log(`[ ] UNEXPECTED FAIL | new sqlite3.Database | ${err.message}`);
+                err_count++;
                 resolve(null);
             } else {
                 console.log('[X] EXPECTED PASS | new sqlite3.Database');
@@ -645,6 +647,7 @@ const ugle_cart = require('./index.js');
             if (i <= 0) {
                 if (err) {
                     console.log(`[ ] UNEXPECTED FAIL | createProduct[${i}] | ${err.message}`);
+                    err_count++;
                 } else {
                     console.log(`[X] EXPECTED PASS | createProduct[${i}]`);
                 }
@@ -653,6 +656,7 @@ const ugle_cart = require('./index.js');
                     console.log(`[X] EXPECTED FAIL | createProduct[${i}] | ${err.message}`);
                 } else {
                     console.log(`[ ] UNEXPECTED PASS | createProduct[${i}]`);
+                    err_count++;
                 }
             }
         });
@@ -779,6 +783,7 @@ const ugle_cart = require('./index.js');
             if (i <= 1) {
                 if (err) {
                     console.log(`[ ] UNEXPECTED FAIL | readProduct[${i}] | ${err.message}`);
+                    err_count++;
                 } else {
                     console.log(`[X] EXPECTED PASS | readProduct[${i}]`);
                 }
@@ -787,10 +792,206 @@ const ugle_cart = require('./index.js');
                     console.log(`[X] EXPECTED FAIL | readProduct[${i}] | ${err.message}`);
                 } else {
                     console.log(`[ ] UNEXPECTED PASS | readProduct[${i}]`);
+                    err_count++;
                 }
             }
         });
     }
+
+
+
+
+    var args = [
+        // valid input
+        {
+            'field': 'sku',
+            'param': 123456,
+            'key': 'sku',
+            'value': 654321
+        },
+        {
+            'field': 'name',
+            'param': 'Hyper Potion',
+            'key': 'name',
+            'value': 'Super Potion'
+        },
+        // strings
+
+        // integers
+        {
+            'field': 8,
+            'param': 123456,
+            'key': 'sku',
+            'value': 654321
+        },
+        {
+            'field': 'name',
+            'param': 'Hyper Potion',
+            'key': 8,
+            'value': 'Super Potion'
+        },
+
+        // objects
+        {
+            'field': {},
+            'param': 123456,
+            'key': 'sku',
+            'value': 654321
+        },
+        {
+            'field': 'name',
+            'param': {},
+            'key': 'name',
+            'value': 'Super Potion'
+        },
+        {
+            'field': 'sku',
+            'param': 123456,
+            'key': {},
+            'value': 654321
+        },
+        {
+            'field': 'name',
+            'param': 'Hyper Potion',
+            'key': 'name',
+            'value': {}
+        },
+
+        // arrays
+        {
+            'field': [],
+            'param': 123456,
+            'key': 'sku',
+            'value': 654321
+        },
+        {
+            'field': 'name',
+            'param': [],
+            'key': 'name',
+            'value': 'Super Potion'
+        },
+        {
+            'field': 'sku',
+            'param': 123456,
+            'key': [],
+            'value': 654321
+        },
+        {
+            'field': 'name',
+            'param': 'Hyper Potion',
+            'key': 'name',
+            'value': []
+        },
+
+        // null
+        {
+            'field': null,
+            'param': 123456,
+            'key': 'sku',
+            'value': 654321
+        },
+        {
+            'field': 'name',
+            'param': null,
+            'key': 'name',
+            'value': 'Super Potion'
+        },
+        {
+            'field': 'sku',
+            'param': 123456,
+            'key': null,
+            'value': 654321
+        },
+        {
+            'field': 'name',
+            'param': 'Hyper Potion',
+            'key': 'name',
+            'value': null
+        },
+
+        // undefined
+        {
+            'field': undefined,
+            'param': 123456,
+            'key': 'sku',
+            'value': 654321
+        },
+        {
+            'field': 'name',
+            'param': undefined,
+            'key': 'name',
+            'value': 'Super Potion'
+        },
+        {
+            'field': 'sku',
+            'param': 123456,
+            'key': undefined,
+            'value': 654321
+        },
+        {
+            'field': 'name',
+            'param': 'Hyper Potion',
+            'key': 'name',
+            'value': undefined
+        },
+
+        // absent
+        {
+            'param': 123456,
+            'key': 'sku',
+            'value': 654321
+        },
+        {
+            'field': 'name',
+            'key': 'name',
+            'value': 'Super Potion'
+        },
+        {
+            'field': 'sku',
+            'param': 123456,
+            'value': 654321
+        },
+        {
+            'field': 'name',
+            'param': 'Hyper Potion',
+            'key': 'name',
+        },
+
+        // SQL injection
+        {
+            'field': 'sku',
+            'param': 123456,
+            'key': 'sku OR 1=1',
+            'value': 654321
+        },
+        {
+            'field': 'name',
+            'param': 'receipts.products Hyper Potion',
+            'key': 'name',
+            'value': 'Super Potion'
+        },
+
+    ];
+    for (let i = 0; i < args.length; i++) {
+        await ugle_cart.updateProduct(dtb, args[i], (err) => {
+            if (i <= 1) {
+                if (err) {
+                    console.log(`[ ] UNEXPECTED FAIL | updateProduct[${i}] | ${err.message}`);
+                    err_count++;
+                } else {
+                    console.log(`[X] EXPECTED PASS | updateProduct[${i}]`);
+                }
+            } else {
+                if (err) {
+                    console.log(`[X] EXPECTED FAIL | updateProduct[${i}] | ${err.message}`);
+                } else {
+                    console.log(`[ ] UNEXPECTED PASS | updateProduct[${i}]`);
+                    err_count++;
+                }
+            }
+        });
+    }
+
 
     ugle_cart.allProducts(dtb, (err, data) => {
         if (err) {
@@ -801,4 +1002,9 @@ const ugle_cart = require('./index.js');
     })
 
 
+    console.log();
+    console.log();
+    console.log();
+    console.log();
+    console.log(`TEST COMPLETED: ${err_count} errors found`);
 });
