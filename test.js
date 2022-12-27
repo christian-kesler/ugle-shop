@@ -26,7 +26,7 @@ var err_count = 0;
     });
 })().then(async (dtb) => {
 
-
+    // createProduct
     var args = [
         // valid input
         {
@@ -676,7 +676,7 @@ var err_count = 0;
 
 
 
-
+    // readProduct
     var args = [
         // valid input
         {
@@ -822,7 +822,7 @@ var err_count = 0;
 
 
 
-
+    // updateProduct
     var args = [
         // valid input
         {
@@ -1015,6 +1015,61 @@ var err_count = 0;
     }
 
 
+
+    // addProductToCart
+    var args = [
+        // valid input
+        {
+            'key': 'sku',
+            'value': 123456,
+            'quantity': 8,
+            'cart': [],
+        },
+        {
+            'key': 'name',
+            'value': 'Poke a ball',
+            'quantity': 8,
+            'cart': [],
+        },
+        // strings
+
+        // integers
+
+        // objects
+
+        // arrays
+
+        // null
+
+        // undefined
+
+        // absent
+
+    ]
+    for (let i = 0; i < args.length; i++) {
+        await ugle_cart.addProductToCart(dtb, args[i], (err, cart) => {
+            if (i <= 1) {
+                if (err) {
+                    console.log(`[ ] UNEXPECTED FAIL | addProductToCart[${i}] | ${err.message}`);
+                    err_count++;
+                } else {
+                    console.log(`[X] EXPECTED PASS | addProductToCart[${i}]`);
+                    console.log(cart)
+                }
+            } else {
+                if (err) {
+                    console.log(`[X] EXPECTED FAIL | addProductToCart[${i}] | ${err.message}`);
+                } else {
+                    console.log(`[ ] UNEXPECTED PASS | addProductToCart[${i}]`);
+                    err_count++;
+                }
+            }
+        });
+    }
+
+
+
+    // deleteProduct
     var args = [
         // valid input
         {
@@ -1101,8 +1156,6 @@ var err_count = 0;
             }
         });
     }
-
-
 
     ugle_cart.allProducts(dtb, (err, data) => {
         if (err) {

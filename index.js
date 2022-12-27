@@ -55,6 +55,7 @@ function parameters
 */
 // const sqlite3 = require(__dirname + '/../sqlite3')
 const sqlite3 = require('sqlite3');
+const ugle_cart = require(__filename);
 /*
     Import Statements - END
 */
@@ -573,19 +574,78 @@ module.exports = {
         return new Promise((resolve) => {
             try {
 
-                if (
-                    args == undefined ||
-                    args.product == undefined ||
-                    args.product.sku == undefined ||
-                    args.product.name == undefined ||
-                    args.product.price == undefined ||
-                    args.cart == undefined
-                ) {
+                if (args.key === undefined) {
+                    callback({
+                        message: 'key is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.key != 'string') {
+                    callback({
+                        message: `key must be string, received "${typeof args.key}"`
+                    });
+                    resolve();
+                } else if (containsSpecialChar(args.key)) {
+                    callback({
+                        message: `key must only contain letters, numbers, spaces, and commas, received "${args.key}"`
+                    });
+                    resolve();
+
+
+                } else if (args.value === undefined) {
+                    callback({
+                        message: 'value is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.value != 'string' && typeof args.value != 'number') {
+                    callback({
+                        message: `value must be string, received "${typeof args.value}"`
+                    });
+                    resolve();
+
+
+                } else if (args.quantity === undefined) {
+                    callback({
+                        message: 'quantity is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.quantity != 'number') {
+                    callback({
+                        message: `quantity must be number, received "${typeof args.quantity}"`
+                    });
+                    resolve();
+
+
+                } else if (args.cart === undefined) {
+                    callback({
+                        message: 'cart is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.cart != 'object' || !Array.isArray(args.cart)) {
+                    callback({
+                        message: `cart must be arraytrue object, received "array${Array.isArray(args.cart)} ${typeof args.cart}"`
+                    });
+                    resolve();
+
 
                 } else {
-                    // add to cart
 
+                    ugle_cart.readProduct(dtb, args, (err, data) => {
+                        if (err) {
+                            callback(err);
+                            resolve();
+                        } else {
+                            args.cart.push({
+                                'sku': data.sku,
+                                'name': data.name,
+                                'price': data.price,
+                                'quantity': args.quantity
+                            })
 
+                            callback(null, args.cart);
+                            resolve();
+
+                        }
+                    })
                 }
             } catch (err) {
                 callback(err)
