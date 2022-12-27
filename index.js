@@ -97,6 +97,12 @@ async function tryCreateTables(dtb) {
         }
     });
 }
+function containsSpecialChar(string) {
+    const regex = /[^A-Za-z0-9, ]/;
+
+    return regex.test(string);
+}
+
 /*
     Private Functions - END
 */
@@ -153,7 +159,7 @@ module.exports = {
                     resolve();
                 } else if (typeof args.params != 'object') {
                     callback({
-                        message: `params must be object, received ${typeof args.params}`
+                        message: `params must be object, received "${typeof args.params}"`
                     });
                     resolve();
 
@@ -165,7 +171,7 @@ module.exports = {
                     resolve();
                 } else if (typeof args.params.sku != 'number') {
                     callback({
-                        message: `params.sku must be number, received ${typeof args.params.sku}`
+                        message: `params.sku must be number, received "${typeof args.params.sku}"`
                     });
                     resolve();
 
@@ -177,7 +183,7 @@ module.exports = {
                     resolve();
                 } else if (typeof args.params.name != 'string') {
                     callback({
-                        message: `params.name must be string, received ${typeof args.params.name}`
+                        message: `params.name must be string, received "${typeof args.params.name}"`
                     });
                     resolve();
 
@@ -189,7 +195,7 @@ module.exports = {
                     resolve();
                 } else if (typeof args.params.price != 'number') {
                     callback({
-                        message: `params.price must be number, received ${typeof args.params.price}`
+                        message: `params.price must be number, received "${typeof args.params.price}"`
                     });
                     resolve();
 
@@ -201,7 +207,7 @@ module.exports = {
                     resolve();
                 } else if (typeof args.params.description_short != 'string') {
                     callback({
-                        message: `params.description_short must be string, received ${typeof args.params.description_short}`
+                        message: `params.description_short must be string, received "${typeof args.params.description_short}"`
                     });
                     resolve();
 
@@ -213,7 +219,7 @@ module.exports = {
                     resolve();
                 } else if (typeof args.params.description_long != 'string') {
                     callback({
-                        message: `params.description_long must be string, received ${typeof args.params.description_long}`
+                        message: `params.description_long must be string, received "${typeof args.params.description_long}"`
                     });
                     resolve();
 
@@ -225,7 +231,7 @@ module.exports = {
                     resolve();
                 } else if (typeof args.params.images != 'string') {
                     callback({
-                        message: `params.images must be string, received ${typeof args.params.images}`
+                        message: `params.images must be string, received "${typeof args.params.images}"`
                     });
                     resolve();
 
@@ -237,7 +243,7 @@ module.exports = {
                     resolve();
                 } else if (typeof args.params.created_at != 'string') {
                     callback({
-                        message: `params.created_at must be string, received ${typeof args.params.created_at}`
+                        message: `params.created_at must be string, received "${typeof args.params.created_at}"`
                     });
                     resolve();
 
@@ -249,7 +255,7 @@ module.exports = {
                     resolve();
                 } else if (typeof args.params.created_by != 'string') {
                     callback({
-                        message: `params.created_by must be string, received ${typeof args.params.created_by}`
+                        message: `params.created_by must be string, received "${typeof args.params.created_by}"`
                     });
                     resolve();
 
@@ -287,7 +293,7 @@ module.exports = {
         });
     },
     readProduct: async (dtb, args, callback) => {
-        // Testing Completed
+        // Testing Complete
         await tryCreateTables(dtb);
 
         return new Promise((resolve) => {
@@ -302,9 +308,17 @@ module.exports = {
                     resolve();
                 } else if (typeof args.fields != 'string') {
                     callback({
-                        message: `fields must be string, received ${typeof args.fields}`
+                        message: `fields must be string, received "${typeof args.fields}"`
                     });
                     resolve();
+                } else if (containsSpecialChar(args.fields)) {
+                    callback({
+                        message: `fields must only contain letters, numbers, spaces, and commas, received "${args.fields}"`
+                    });
+                    resolve();
+
+
+
                 } else if (args.key === undefined) {
                     callback({
                         message: 'key is undefined'
@@ -312,9 +326,16 @@ module.exports = {
                     resolve();
                 } else if (typeof args.key != 'string') {
                     callback({
-                        message: `key must be string, received ${typeof args.key}`
+                        message: `key must be string, received "${typeof args.key}"`
                     });
                     resolve();
+                } else if (containsSpecialChar(args.key)) {
+                    callback({
+                        message: `key must only contain letters, numbers, spaces, and commas, received "${args.key}"`
+                    });
+                    resolve();
+
+
                 } else if (args.value === undefined) {
                     callback({
                         message: 'value is undefined'
@@ -322,7 +343,7 @@ module.exports = {
                     resolve();
                 } else if (typeof args.value != 'string' && typeof args.value != 'number') {
                     callback({
-                        message: `value must be string, received ${typeof args.value}`
+                        message: `value must be string, received "${typeof args.value}"`
                     });
                     resolve();
 
@@ -367,7 +388,7 @@ module.exports = {
         });
     },
     updateProduct: async (dtb, args, callback) => {
-        // TODO testing
+        // Testing Complete
         await tryCreateTables(dtb);
 
         return new Promise((resolve) => {
@@ -380,7 +401,7 @@ module.exports = {
                     resolve();
                 } else if (typeof args.field != 'string') {
                     callback({
-                        message: `field must be string, received ${typeof args.field}`
+                        message: `field must be string, received "${typeof args.field}"`
                     });
                     resolve();
 
@@ -392,7 +413,7 @@ module.exports = {
                     resolve();
                 } else if (typeof args.param != 'string' && typeof args.param != 'number') {
                     callback({
-                        message: `param must be string or number, received ${typeof args.param}`
+                        message: `param must be string or number, received "${typeof args.param}"`
                     });
                     resolve();
 
@@ -404,7 +425,7 @@ module.exports = {
                     resolve();
                 } else if (typeof args.key != 'string') {
                     callback({
-                        message: `key must be string, received ${typeof args.key}`
+                        message: `key must be string, received "${typeof args.key}"`
                     });
                     resolve();
 
@@ -416,7 +437,7 @@ module.exports = {
                     resolve();
                 } else if (typeof args.value != 'string' && typeof args.value != 'number') {
                     callback({
-                        message: `value must be string or number, received ${typeof args.key}`
+                        message: `value must be string or number, received "${typeof args.key}"`
                     });
                     resolve();
 
@@ -467,25 +488,32 @@ module.exports = {
         });
     },
     deleteProduct: async (dtb, args, callback) => {
-        // TODO testing
+        // Testing Complete
         await tryCreateTables(dtb);
 
         return new Promise((resolve) => {
             try {
-                if (!allValuesAreStrings(args)) {
 
+                if (args.key === undefined) {
                     callback({
-                        message: 'non-string values detected'
+                        message: 'key is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.key != 'string') {
+                    callback({
+                        message: `key must be string, received "${typeof args.key}"`
                     });
                     resolve();
 
-                } else if (
-                    args.key === undefined ||
-                    args.value === undefined
-                ) {
 
+                } else if (args.value === undefined) {
                     callback({
-                        message: 'missing args'
+                        message: 'value is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.value != 'string' && typeof args.value != 'number') {
+                    callback({
+                        message: `value must be string or number, received "${typeof args.key}"`
                     });
                     resolve();
 
@@ -494,10 +522,9 @@ module.exports = {
                     dtb.run(`DELETE FROM products WHERE ${args.key} = ?;`, [args.value], async function (err) {
                         if (err) {
 
-                            callback({
-                                message: err.message,
-                            });
+                            callback(err);
                             resolve();
+
                         } else if (this.changes == 0) {
 
                             callback(
@@ -510,6 +537,7 @@ module.exports = {
                                 }
                             );
                             resolve();
+
                         } else {
 
                             callback(
@@ -520,15 +548,14 @@ module.exports = {
                                 }
                             );
                             resolve();
+
                         }
                     });
 
                 }
             } catch (err) {
 
-                callback({
-                    message: err.message
-                });
+                callback(err);
                 resolve();
 
             }
