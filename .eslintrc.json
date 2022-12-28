@@ -27,10 +27,8 @@
         ]
     },
     "globals": {
-        // "__dirname": true,
         "require": true,
         "module": true,
-        // "process": true,
         "global": true,
         "cart_arr": true
     }
