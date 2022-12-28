@@ -1,49 +1,157 @@
 /*
 ================================================================
-ugle-cart
+ugle-shop
 ----------------
-functions overview
+functions and their arguments
 
-    createProduct           (dtb, args, callback(err))
-    readProduct             (dtb, args, callback(err, data))
-    updateProduct           (dtb, args, callback(err, changes))
-    deleteProduct           (dtb, args, callback(err, changes))
-    allProducts             (dtb,       callback(err, data))
+    createProduct
+        dtb - [object] database connection
+        args - [object]
+            sku - [string || number]
+            name - [string] 
+            price - [number]
+            description_short - [string]
+            description_long - [string] 
+            images - [string]
+            created_at - [string]
+            created_by - [string]
+        callback - [function]
+            err - [object] null if function is successful
+                message - [string] describes the error that occured
 
-    addProductToCart        (dtb, args, callback(err, cart))
-    removeProductFromCart   (dtb, args, callback(err, cart))
-    deleteCart              (dtb, args, callback(err, cart))
-    checkoutCart            (dtb, args, callback(err, cart))
 
-    readReceipt             (dtb, args, callback(err, data))
-    confirmReceipt          (dtb, args, callback(err, changes))
-    rejectReceipt           (dtb, args, callback(err, changes))
-    allReceipts             (dtb,       callback(err, data))
+    readProduct
+        dtb - [object], database connection
+        sku - [number]
+        callback - [function]
+            err - [object] null if function is successful
+                message - [string] describes the error that occured
+            data - [object] contains product data
 
-----------------
-function parameters
-    dtb - variable representing sqlite database connection
-    args - object containing varying information necessary for each function
-        fields - string containing the database fields to affect
-        field - string containing the database field to affect
-        params - an object containing the values to be written into the database
-            sku                 - number
-            name                - variable
-            price               - number
-            description_short   - string
-            description_long    - string
-            images              - string
-            created_at          - string
-            created_by          - string
-        param - a variable containing the value to be written into the database
-        key - variable containing the field to index
-        value - variable containing the value to search for
-        cart - array containing objects for each product 
 
-    callback - executed upon completion of the package function
-        err - null if successful, object if function failed
-            message - descriptive string of what went wrong, taken from sqlite when possible
-        data/changes - object containing sqlite data, database changes, or relevant object data if successful, null if function failed
+    updateProduct
+        dtb - [object], database connection
+        args - [object]
+            field - [string]
+            param - [string || number]
+            value - [string]
+        callback - [function]
+            err - [object] null if function is successful
+                message - [string] describes the error that occured
+            changes - [object]
+
+
+    deleteProduct           (dtb, sku,  callback(err, changes))
+        dtb - [object], database connection
+        sku - [string || number]
+        callback - [function]
+            err - [object] null if function is successful
+                message - [string] describes the error that occured
+            data - [object]
+
+
+    allProducts
+        dtb - [object], database connection
+        callback - [function]
+            err - [object] null if function is successful
+                message - [string] describes the error that occured
+            data - [array object]
+
+
+
+
+
+    addToCart
+        dtb - [object], database connection
+        args - [object]
+            sku - [string || number]
+            qty - [number]
+            cart - [array object]
+        callback - [function]
+            err - [object] null if function is successful
+                message - [string] describes the error that occured
+            cart - [array object]
+
+
+    removeFromCart
+        dtb - [object], database connection
+        args - [object]
+            sku - [string || number]
+            qty - [number]
+            cart - [array object]
+        callback - [function]
+            err - [object] null if function is successful
+                message - [string] describes the error that occured
+            cart - [array object]
+
+
+    emptyCart
+        dtb - [object], database connection
+        cart - [array object]
+        callback - [function]
+            err - [object] null if function is successful
+                message - [string] describes the error that occured
+            cart - [array object]
+
+
+    checkoutCart
+        dtb - [object], database connection
+        args - [object]
+            cart - [array object]
+            time - [string]
+            user - [string]
+        callback - [function]
+            err - [object] null if function is successful
+                message - [string] describes the error that occured
+            cart - [array object]
+
+
+
+
+
+    readReceipt
+        dtb - [object], database connection
+        id - [number || string]
+        callback - [function]
+            err - [object] null if function is successful
+                message - [string] describes the error that occured
+            data - [object]
+
+
+    confirmReceipt   
+        dtb - [object], database connection
+        args - [object]
+            id - [string || number]
+            time - [string]
+            user - [string]
+        callback - [function]
+            err - [object] null if function is successful
+                message - [string] describes the error that occured
+            data - [object]
+
+
+    rejectReceipt          
+        dtb - [object], database connection
+        args - [object]
+            id - [string || number]
+            time - [string]
+            user - [string]
+        callback - [function]
+            err - [object] null if function is successful
+                message - [string] describes the error that occured
+            data - [object]
+
+
+    allReceipts            
+        dtb - [object], database connection
+        callback - [function]
+            err - [object] null if function is successful
+                message - [string] describes the error that occured
+            data - [object]
+
+
+
+
 ================================================================
 */
 
@@ -53,9 +161,7 @@ function parameters
 /*
     Import Statements - BEGIN
 */
-// const sqlite3 = require(__dirname + '/../sqlite3')
 const sqlite3 = require('sqlite3');
-const ugle_cart = require(__filename);
 /*
     Import Statements - END
 */
@@ -82,7 +188,9 @@ async function tryCreateTables(dtb) {
             dtb.exec(
                 `CREATE TABLE IF NOT EXISTS receipts(
                 'id' INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                'total' INTEGER,
                 'cart' TEXT,
+                'status' VARCHAR(255),
                 'created_at' DATETIME,
                 'created_by' VARCHAR(255),
                 'confirmed_at' DATETIME,
@@ -98,12 +206,6 @@ async function tryCreateTables(dtb) {
         }
     });
 }
-function containsSpecialChar(string) {
-    const regex = /[^A-Za-z0-9, ]/;
-
-    return regex.test(string);
-}
-
 /*
     Private Functions - END
 */
@@ -153,110 +255,110 @@ module.exports = {
 
                 tryCreateTables(dtb);
 
-                if (args.params === undefined) {
+                if (args === undefined) {
                     callback({
-                        message: 'params is undefined'
+                        message: 'args is undefined'
                     });
                     resolve();
-                } else if (typeof args.params != 'object') {
+                } else if (typeof args != 'object') {
                     callback({
-                        message: `params must be object, received "${typeof args.params}"`
-                    });
-                    resolve();
-
-
-                } else if (args.params.sku === undefined) {
-                    callback({
-                        message: 'params.sku is undefined'
-                    });
-                    resolve();
-                } else if (typeof args.params.sku != 'number') {
-                    callback({
-                        message: `params.sku must be number, received "${typeof args.params.sku}"`
+                        message: `args must be object, received "${typeof args}"`
                     });
                     resolve();
 
 
-                } else if (args.params.name === undefined) {
+                } else if (args.sku === undefined) {
                     callback({
-                        message: 'params.name is undefined'
+                        message: 'args.sku is undefined'
                     });
                     resolve();
-                } else if (typeof args.params.name != 'string') {
+                } else if (typeof args.sku != 'string' && typeof args.sku != 'number') {
                     callback({
-                        message: `params.name must be string, received "${typeof args.params.name}"`
-                    });
-                    resolve();
-
-
-                } else if (args.params.price === undefined) {
-                    callback({
-                        message: 'params.price is undefined'
-                    });
-                    resolve();
-                } else if (typeof args.params.price != 'number') {
-                    callback({
-                        message: `params.price must be number, received "${typeof args.params.price}"`
+                        message: `args.sku must be string or number, received "${typeof args.sku}"`
                     });
                     resolve();
 
 
-                } else if (args.params.description_short === undefined) {
+                } else if (args.name === undefined) {
                     callback({
-                        message: 'params.description_short is undefined'
+                        message: 'args.name is undefined'
                     });
                     resolve();
-                } else if (typeof args.params.description_short != 'string') {
+                } else if (typeof args.name != 'string') {
                     callback({
-                        message: `params.description_short must be string, received "${typeof args.params.description_short}"`
-                    });
-                    resolve();
-
-
-                } else if (args.params.description_long === undefined) {
-                    callback({
-                        message: 'params.description_long is undefined'
-                    });
-                    resolve();
-                } else if (typeof args.params.description_long != 'string') {
-                    callback({
-                        message: `params.description_long must be string, received "${typeof args.params.description_long}"`
+                        message: `args.name must be string, received "${typeof args.name}"`
                     });
                     resolve();
 
 
-                } else if (args.params.images === undefined) {
+                } else if (args.price === undefined) {
                     callback({
-                        message: 'params.images is undefined'
+                        message: 'args.price is undefined'
                     });
                     resolve();
-                } else if (typeof args.params.images != 'string') {
+                } else if (typeof args.price != 'number') {
                     callback({
-                        message: `params.images must be string, received "${typeof args.params.images}"`
-                    });
-                    resolve();
-
-
-                } else if (args.params.created_at === undefined) {
-                    callback({
-                        message: 'params.created_at is undefined'
-                    });
-                    resolve();
-                } else if (typeof args.params.created_at != 'string') {
-                    callback({
-                        message: `params.created_at must be string, received "${typeof args.params.created_at}"`
+                        message: `args.price must be number, received "${typeof args.price}"`
                     });
                     resolve();
 
 
-                } else if (args.params.created_by === undefined) {
+                } else if (args.description_short === undefined) {
                     callback({
-                        message: 'params.created_by is undefined'
+                        message: 'args.description_short is undefined'
                     });
                     resolve();
-                } else if (typeof args.params.created_by != 'string') {
+                } else if (typeof args.description_short != 'string') {
                     callback({
-                        message: `params.created_by must be string, received "${typeof args.params.created_by}"`
+                        message: `args.description_short must be string, received "${typeof args.description_short}"`
+                    });
+                    resolve();
+
+
+                } else if (args.description_long === undefined) {
+                    callback({
+                        message: 'args.description_long is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.description_long != 'string') {
+                    callback({
+                        message: `args.description_long must be string, received "${typeof args.description_long}"`
+                    });
+                    resolve();
+
+
+                } else if (args.images === undefined) {
+                    callback({
+                        message: 'args.images is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.images != 'string') {
+                    callback({
+                        message: `args.images must be string, received "${typeof args.images}"`
+                    });
+                    resolve();
+
+
+                } else if (args.created_at === undefined) {
+                    callback({
+                        message: 'args.created_at is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.created_at != 'string') {
+                    callback({
+                        message: `args.created_at must be string, received "${typeof args.created_at}"`
+                    });
+                    resolve();
+
+
+                } else if (args.created_by === undefined) {
+                    callback({
+                        message: 'args.created_by is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.created_by != 'string') {
+                    callback({
+                        message: `args.created_by must be string, received "${typeof args.created_by}"`
                     });
                     resolve();
 
@@ -264,14 +366,14 @@ module.exports = {
                 } else {
 
                     dtb.run(`INSERT INTO products(sku, name, price, description_short, description_long, images, created_at, created_by) VALUES(?, ?, ?, ?, ?, ?, ?, ?);`, [
-                        args.params.sku,
-                        args.params.name,
-                        args.params.price,
-                        args.params.description_short,
-                        args.params.description_long,
-                        JSON.stringify(args.params.images),
-                        args.params.created_at,
-                        args.params.created_by,
+                        args.sku,
+                        args.name,
+                        args.price,
+                        args.description_short,
+                        args.description_long,
+                        args.images,
+                        args.created_at,
+                        args.created_by,
                     ], (err) => {
                         if (err) {
 
@@ -293,7 +395,7 @@ module.exports = {
             }
         });
     },
-    readProduct: async (dtb, args, callback) => {
+    readProduct: async (dtb, sku, callback) => {
         // Testing Complete
         await tryCreateTables(dtb);
 
@@ -302,63 +404,26 @@ module.exports = {
 
                 tryCreateTables(dtb);
 
-                if (args.fields === undefined) {
+                if (sku === undefined) {
                     callback({
-                        message: 'fields is undefined'
+                        message: 'sku is undefined'
                     });
                     resolve();
-                } else if (typeof args.fields != 'string') {
+                } else if (typeof sku != 'string' && typeof sku != 'number') {
                     callback({
-                        message: `fields must be string, received "${typeof args.fields}"`
-                    });
-                    resolve();
-                } else if (containsSpecialChar(args.fields)) {
-                    callback({
-                        message: `fields must only contain letters, numbers, spaces, and commas, received "${args.fields}"`
-                    });
-                    resolve();
-
-
-
-                } else if (args.key === undefined) {
-                    callback({
-                        message: 'key is undefined'
-                    });
-                    resolve();
-                } else if (typeof args.key != 'string') {
-                    callback({
-                        message: `key must be string, received "${typeof args.key}"`
-                    });
-                    resolve();
-                } else if (containsSpecialChar(args.key)) {
-                    callback({
-                        message: `key must only contain letters, numbers, spaces, and commas, received "${args.key}"`
-                    });
-                    resolve();
-
-
-                } else if (args.value === undefined) {
-                    callback({
-                        message: 'value is undefined'
-                    });
-                    resolve();
-                } else if (typeof args.value != 'string' && typeof args.value != 'number') {
-                    callback({
-                        message: `value must be string, received "${typeof args.value}"`
+                        message: `sku must be string or number, received "${typeof sku}"`
                     });
                     resolve();
 
                 } else {
 
                     dtb.all(
-                        `SELECT ${args.fields} FROM products WHERE ${args.key} = ?;`,
-                        [args.value],
+                        `SELECT * FROM products WHERE sku = ?;`,
+                        [sku],
                         (err, rows) => {
                             if (err) {
 
-                                callback({
-                                    message: err.message
-                                });
+                                callback(err);
                                 resolve();
 
                             } else if (rows.length == 0) {
@@ -370,7 +435,7 @@ module.exports = {
 
                             } else {
 
-                                callback(null, rows);
+                                callback(null, rows[0]);
                                 resolve();
 
                             }
@@ -380,9 +445,7 @@ module.exports = {
                 }
             } catch (err) {
 
-                callback({
-                    message: 'CATCH ERROR ' + err.message
-                });
+                callback(err);
                 resolve();
 
             }
@@ -419,18 +482,6 @@ module.exports = {
                     resolve();
 
 
-                } else if (args.key === undefined) {
-                    callback({
-                        message: 'key is undefined'
-                    });
-                    resolve();
-                } else if (typeof args.key != 'string') {
-                    callback({
-                        message: `key must be string, received "${typeof args.key}"`
-                    });
-                    resolve();
-
-
                 } else if (args.value === undefined) {
                     callback({
                         message: 'value is undefined'
@@ -438,89 +489,103 @@ module.exports = {
                     resolve();
                 } else if (typeof args.value != 'string' && typeof args.value != 'number') {
                     callback({
-                        message: `value must be string or number, received "${typeof args.key}"`
+                        message: `value must be string or number, received "${typeof args.value}"`
                     });
                     resolve();
 
                 } else {
 
-                    dtb.run(`UPDATE products SET ${args.field} = ? WHERE ${args.key} = ?;`, [args.param, args.value], async function (err) {
-                        if (err) {
+                    fields = [
+                        'sku',
+                        'name',
+                        'price',
+                        'description_short',
+                        'description_long',
+                        'images',
+                        'created_at',
+                        'created_by'
+                    ]
 
-                            callback({
-                                message: err.message,
-                            });
-                            resolve();
-                        } else if (this.changes == 0) {
+                    query = null
 
-                            callback(
-                                {
-                                    message: `Row(s) affected: ${this.changes}`
-                                },
-                                {
-                                    count: this.changes,
-                                    message: `Row(s) affected: ${this.changes}`
-                                }
-                            );
-                            resolve();
-                        } else {
-
-                            callback(
-                                null,
-                                {
-                                    count: this.changes,
-                                    message: `Row(s) affected: ${this.changes}`
-                                }
-                            );
-                            resolve();
+                    fields.forEach(field => {
+                        if (args.field == field) {
+                            query = `UPDATE products SET ${args.field} = ? WHERE sku = ?;`
                         }
-                    });
+                    })
+
+                    if (query == null) {
+                        callback({
+                            message: `args.field is invalid, expected one of ${JSON.stringify(fields)}`
+                        });
+                        resolve();
+
+                    } else {
+
+                        dtb.run(query, [args.param, args.value], async function (err) {
+                            if (err) {
+
+                                callback(err);
+                                resolve();
+                            } else if (this.changes == 0) {
+
+                                callback(
+                                    {
+                                        message: `Row(s) affected: ${this.changes}`
+                                    },
+                                    {
+                                        count: this.changes,
+                                        message: `Row(s) affected: ${this.changes}`
+                                    }
+                                );
+                                resolve();
+                            } else {
+
+                                callback(
+                                    null,
+                                    {
+                                        count: this.changes,
+                                        message: `Row(s) affected: ${this.changes}`
+                                    }
+                                );
+                                resolve();
+                            }
+                        });
+                    }
+
 
                 }
 
             } catch (err) {
 
-                callback({
-                    message: err.message
-                });
+                callback(err);
                 resolve();
 
             }
         });
     },
-    deleteProduct: async (dtb, args, callback) => {
+    deleteProduct: async (dtb, sku, callback) => {
         // Testing Complete
         await tryCreateTables(dtb);
 
         return new Promise((resolve) => {
             try {
 
-                if (args.key === undefined) {
-                    callback({
-                        message: 'key is undefined'
-                    });
-                    resolve();
-                } else if (typeof args.key != 'string') {
-                    callback({
-                        message: `key must be string, received "${typeof args.key}"`
-                    });
-                    resolve();
 
-
-                } else if (args.value === undefined) {
+                if (sku === undefined) {
                     callback({
                         message: 'value is undefined'
                     });
                     resolve();
-                } else if (typeof args.value != 'string' && typeof args.value != 'number') {
+                } else if (typeof sku != 'string' && typeof sku != 'number') {
                     callback({
-                        message: `value must be string or number, received "${typeof args.key}"`
+                        message: `sku must be string or number, received "${typeof sku}"`
                     });
                     resolve();
 
                 } else {
 
-                    dtb.run(`DELETE FROM products WHERE ${args.key} = ?;`, [args.value], async function (err) {
+                    dtb.run(`DELETE FROM products WHERE sku = ?;`, [sku], async function (err) {
                         if (err) {
 
                             callback(err);
@@ -562,119 +627,6 @@ module.exports = {
             }
         });
     },
-    /*
-            CRUD product functions - END
-    */
-
-
-    /*
-            Cart Management functions - BEGIN
-    */
-    addProductToCart: async (dtb, args, callback) => {
-        return new Promise((resolve) => {
-            try {
-
-                if (args.key === undefined) {
-                    callback({
-                        message: 'key is undefined'
-                    });
-                    resolve();
-                } else if (typeof args.key != 'string') {
-                    callback({
-                        message: `key must be string, received "${typeof args.key}"`
-                    });
-                    resolve();
-                } else if (containsSpecialChar(args.key)) {
-                    callback({
-                        message: `key must only contain letters, numbers, spaces, and commas, received "${args.key}"`
-                    });
-                    resolve();
-
-
-                } else if (args.value === undefined) {
-                    callback({
-                        message: 'value is undefined'
-                    });
-                    resolve();
-                } else if (typeof args.value != 'string' && typeof args.value != 'number') {
-                    callback({
-                        message: `value must be string, received "${typeof args.value}"`
-                    });
-                    resolve();
-
-
-                } else if (args.quantity === undefined) {
-                    callback({
-                        message: 'quantity is undefined'
-                    });
-                    resolve();
-                } else if (typeof args.quantity != 'number') {
-                    callback({
-                        message: `quantity must be number, received "${typeof args.quantity}"`
-                    });
-                    resolve();
-
-
-                } else if (args.cart === undefined) {
-                    callback({
-                        message: 'cart is undefined'
-                    });
-                    resolve();
-                } else if (typeof args.cart != 'object' || !Array.isArray(args.cart)) {
-                    callback({
-                        message: `cart must be arraytrue object, received "array${Array.isArray(args.cart)} ${typeof args.cart}"`
-                    });
-                    resolve();
-
-
-                } else {
-
-                    ugle_cart.readProduct(dtb, args, (err, data) => {
-                        if (err) {
-                            callback(err);
-                            resolve();
-                        } else {
-                            args.cart.push({
-                                'sku': data.sku,
-                                'name': data.name,
-                                'price': data.price,
-                                'quantity': args.quantity
-                            })
-
-                            callback(null, args.cart);
-                            resolve();
-
-                        }
-                    })
-                }
-            } catch (err) {
-                callback(err)
-                resolve()
-            }
-
-        })
-        // (err, cart)
-    },
-    removeProductFromCart: async (dtb, args, callback) => {
-        // (err, cart)
-    },
-    deleteCart: async (dtb, args, callback) => {
-        // (err, cart)
-    },
-    checkoutCart: async (dtb, args, callback) => {
-        // (err, cart)
-    },
-    /*
-            Cart Management functions - END
-    */
-    /*
-        functionName: async (dtb, args, callback) => { } - END
-    */
-
-
-    /*
-        functionName: async (dtb, callback) => { } - BEGIN
-    */
     allProducts: async (dtb, callback) => {
         await tryCreateTables(dtb);
 
@@ -696,8 +648,606 @@ module.exports = {
         });
     },
     /*
-        functionName: async (dtb, callback) => { }- END
+            CRUD product functions - END
     */
+
+
+    /*
+            Cart Management functions - BEGIN
+    */
+    addToCart: async (dtb, args, callback) => {
+        /* 
+            args = {
+                'sku':987654321,
+                'qty':1,
+                'cart':cart_obj
+            }
+        */
+        return new Promise((resolve) => {
+            try {
+
+                if (args === undefined) {
+                    callback({
+                        message: 'args is undefined'
+                    });
+                    resolve();
+                } else if (typeof args != 'object') {
+                    callback({
+                        message: `args must be object, received "${typeof args}"`
+                    });
+                    resolve();
+
+
+                } else if (args.sku === undefined) {
+                    callback({
+                        message: 'sku is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.sku != 'string' && typeof args.sku != 'number') {
+                    callback({
+                        message: `args.sku must be string or number, received "${typeof args.sku}"`
+                    });
+                    resolve();
+
+
+                } else if (args.qty === undefined) {
+                    callback({
+                        message: 'qty is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.qty != 'number') {
+                    callback({
+                        message: `qty must be number, received "${typeof args.qty}"`
+                    });
+                    resolve();
+
+
+                } else if (args.cart === undefined) {
+                    callback({
+                        message: 'cart is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.cart != 'object' || !Array.isArray(args.cart)) {
+                    callback({
+                        message: `cart must be array object, received "${typeof args.cart}" (array = ${Array.isArray(args.cart)})`
+                    });
+                    resolve();
+
+
+                } else {
+
+                    in_cart = false;
+                    for (i = 0; i < args.cart.length; i++) {
+                        if (args.cart[i].sku == args.sku) {
+                            in_cart = true
+                            args.cart[i].qty += args.qty
+                        }
+                    }
+
+                    if (in_cart) {
+                        callback(null, args.cart);
+                        resolve();
+
+                    } else {
+                        dtb.all(
+                            `SELECT * FROM products WHERE sku = ?;`,
+                            [args.sku],
+                            (err, rows) => {
+                                if (err) {
+
+                                    callback(err);
+                                    resolve();
+
+                                } else if (rows.length == 0) {
+
+                                    callback({
+                                        message: 'product not found'
+                                    });
+                                    resolve();
+
+                                } else {
+
+                                    args.cart.push({
+                                        'sku': rows[0].sku,
+                                        'name': rows[0].name,
+                                        'price': rows[0].price,
+                                        'qty': args.qty,
+
+                                    })
+
+                                    callback(null, args.cart);
+                                    resolve();
+
+                                }
+                            }
+                        );
+                    }
+                }
+            } catch (err) {
+                callback(err)
+                resolve()
+            }
+
+        })
+        // (err, cart)
+    },
+    removeFromCart: async (args, callback) => {
+        /* 
+            args = {
+                'sku':987654321,
+                'qty':1,
+                'cart':req.session.cart
+            }
+        */
+        return new Promise((resolve) => {
+            try {
+
+                if (args === undefined) {
+                    callback({
+                        message: 'args is undefined'
+                    });
+                    resolve();
+                } else if (typeof args != 'object') {
+                    callback({
+                        message: `args must be object, received "${typeof args}"`
+                    });
+                    resolve();
+
+
+                } else if (args.sku === undefined) {
+                    callback({
+                        message: 'sku is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.sku != 'string' && typeof args.sku != 'number') {
+                    callback({
+                        message: `args.sku must be string or number, received "${typeof args.sku}"`
+                    });
+                    resolve();
+
+
+                } else if (args.qty === undefined) {
+                    callback({
+                        message: 'qty is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.qty != 'number') {
+                    callback({
+                        message: `qty must be number, received "${typeof args.qty}"`
+                    });
+                    resolve();
+
+
+                } else if (args.cart === undefined) {
+                    callback({
+                        message: 'cart is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.cart != 'object' || !Array.isArray(args.cart)) {
+                    callback({
+                        message: `cart must be array object, received "${typeof args.cart}" (array = ${Array.isArray(args.cart)})`
+                    });
+                    resolve();
+
+
+                } else {
+
+                    in_cart = false;
+                    for (i = 0; i < args.cart.length; i++) {
+                        if (args.cart[i].sku == args.sku) {
+                            in_cart = true;
+                            args.cart[i].qty -= args.qty
+                            if (args.cart[i].qty == 0) {
+                                args.cart.splice(i, 1);
+                            }
+                        }
+                    }
+
+                    if (!in_cart) {
+                        callback({
+                            'message': 'product not found within the cart'
+                        });
+                        resolve();
+
+                    } else {
+                        callback(null, args.cart);
+                        resolve();
+
+                    }
+                }
+            } catch (err) {
+                callback(err)
+                resolve()
+            }
+
+        })
+    },
+    emptyCart: async (cart, callback) => {
+
+        return new Promise((resolve) => {
+            try {
+
+                if (cart === undefined) {
+                    callback({
+                        message: 'cart is undefined'
+                    });
+                    resolve();
+                } else if (typeof cart != 'object' || !Array.isArray(cart)) {
+                    callback({
+                        message: `cart must be array object, received "${typeof cart}" (array = ${Array.isArray(cart)})`
+                    });
+                    resolve();
+                } else {
+
+                    cart = []
+
+                    callback(null, cart)
+                    resolve()
+                }
+            } catch (err) {
+                callback(err)
+                resolve()
+            }
+        })
+    },
+    checkoutCart: async (dtb, args, callback) => {
+        /* 
+            args = {
+                'cart':req.session.cart
+                'time':`${new Date}`,
+                'user':req.session.email,
+            }
+        */
+        return new Promise((resolve) => {
+            try {
+
+                if (args === undefined) {
+                    callback({
+                        message: 'args is undefined'
+                    });
+                    resolve();
+                } else if (typeof args != 'object') {
+                    callback({
+                        message: `args must be object, received "${typeof args}"`
+                    });
+                    resolve();
+
+
+                } else if (args.cart === undefined) {
+                    callback({
+                        message: 'cart is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.cart != 'object' || !Array.isArray(args.cart)) {
+                    callback({
+                        message: `cart must be array object, received "${typeof args.cart}" (array = ${Array.isArray(args.cart)})`
+                    });
+                    resolve();
+
+
+                } else if (args.time === undefined) {
+                    callback({
+                        message: 'time is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.time != 'string') {
+                    callback({
+                        message: `time must be string, received "${typeof args.time}"`
+                    });
+                    resolve();
+
+
+                } else if (args.user === undefined) {
+                    callback({
+                        message: 'user is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.user != 'string') {
+                    callback({
+                        message: `user must be string, received "${typeof args.user}"`
+                    });
+                    resolve();
+
+
+                } else {
+
+                    total = 0
+                    for (let i = 0; i < args.cart.length; i++) {
+                        total += (args.cart[i].price * args.cart[i].qty)
+                    }
+
+                    dtb.run(`INSERT INTO receipts(total, cart, status, created_at, created_by) VALUES(?, ?, ?, ?, ?);`, [
+                        total,
+                        JSON.stringify(args.cart),
+                        'pending',
+                        args.time,
+                        args.user,
+                    ], (err) => {
+                        if (err) {
+
+                            callback(err);
+                            resolve();
+
+                        } else {
+
+                            cart = []
+
+                            callback(null, cart)
+                            resolve()
+
+                        }
+                    });
+                }
+            } catch (err) {
+                callback(err)
+                resolve()
+            }
+
+        })
+    },
+    /*
+            Cart Management functions - END
+    */
+
+
+    /*
+            Receipt Management functions - BEGIN
+    */
+    readReceipt: async (dtb, id, callback) => {
+        await tryCreateTables(dtb);
+
+        return new Promise((resolve) => {
+            try {
+                if (id === undefined) {
+                    callback({
+                        message: 'id is undefined'
+                    });
+                    resolve();
+                } else if (typeof id != 'number') {
+                    callback({
+                        message: `id must be id, received "${typeof id}"`
+                    });
+                    resolve();
+                } else {
+                    dtb.all('SELECT * FROM receipts WHERE id = ?;', [id], (err, rows) => {
+                        if (err) {
+                            callback(err);
+                            resolve();
+                        } else {
+                            callback(null, rows[0]);
+                            resolve();
+                        }
+                    });
+                }
+            } catch (err) {
+                callback(err);
+                resolve();
+            }
+        });
+    },
+    confirmReceipt: async (dtb, args, callback) => {
+        /* 
+            args = {
+                'id':1,
+                'time':`${new Date}`,
+                'user':req.session.email,
+            }
+        */
+        return new Promise((resolve) => {
+            try {
+
+                if (args === undefined) {
+                    callback({
+                        message: 'args is undefined'
+                    });
+                    resolve();
+                } else if (typeof args != 'object') {
+                    callback({
+                        message: `args must be object, received "${typeof args}"`
+                    });
+                    resolve();
+
+
+                } else if (args.id === undefined) {
+                    callback({
+                        message: 'id is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.id != 'number') {
+                    callback({
+                        message: `id must be number, received "${typeof args.id}"`
+                    });
+                    resolve();
+
+
+                } else if (args.time === undefined) {
+                    callback({
+                        message: 'time is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.time != 'string') {
+                    callback({
+                        message: `time must be string, received "${typeof args.time}"`
+                    });
+                    resolve();
+
+
+                } else if (args.user === undefined) {
+                    callback({
+                        message: 'user is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.user != 'string') {
+                    callback({
+                        message: `user must be string, received "${typeof args.user}"`
+                    });
+                    resolve();
+
+
+                } else {
+
+                    dtb.run('UPDATE receipts SET status = ?, confirmed_at = ?, confirmed_by = ? WHERE id = ?;', ['confirmed', args.time, args.user, args.id], async function (err) {
+                        if (err) {
+
+                            callback(err);
+                            resolve();
+                        } else if (this.changes == 0) {
+
+                            callback(
+                                {
+                                    message: `Row(s) affected: ${this.changes}`
+                                },
+                                {
+                                    count: this.changes,
+                                    message: `Row(s) affected: ${this.changes}`
+                                }
+                            );
+                            resolve();
+                        } else {
+
+                            callback(
+                                null,
+                                {
+                                    count: this.changes,
+                                    message: `Row(s) affected: ${this.changes}`
+                                }
+                            );
+                            resolve();
+                        }
+                    });
+
+                }
+            } catch (err) {
+                callback(err)
+                resolve()
+            }
+
+        })
+    },
+    rejectReceipt: async (dtb, args, callback) => {
+        /* 
+            args = {
+                'id':1,
+                'time':`${new Date}`,
+                'user':req.session.email,
+            }
+        */
+        return new Promise((resolve) => {
+            try {
+
+                if (args === undefined) {
+                    callback({
+                        message: 'args is undefined'
+                    });
+                    resolve();
+                } else if (typeof args != 'object') {
+                    callback({
+                        message: `args must be object, received "${typeof args}"`
+                    });
+                    resolve();
+
+
+                } else if (args.id === undefined) {
+                    callback({
+                        message: 'id is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.id != 'number') {
+                    callback({
+                        message: `id must be number, received "${typeof args.id}"`
+                    });
+                    resolve();
+
+
+                } else if (args.time === undefined) {
+                    callback({
+                        message: 'time is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.time != 'string') {
+                    callback({
+                        message: `time must be string, received "${typeof args.time}"`
+                    });
+                    resolve();
+
+
+                } else if (args.user === undefined) {
+                    callback({
+                        message: 'user is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.user != 'string') {
+                    callback({
+                        message: `user must be string, received "${typeof args.user}"`
+                    });
+                    resolve();
+
+
+                } else {
+
+                    dtb.run('UPDATE receipts SET status = ?, rejected_at = ?, rejected_by = ? WHERE id = ?;', ['rejected', args.time, args.user, args.id], async function (err) {
+                        if (err) {
+
+                            callback(err);
+                            resolve();
+                        } else if (this.changes == 0) {
+
+                            callback(
+                                {
+                                    message: `Row(s) affected: ${this.changes}`
+                                },
+                                {
+                                    count: this.changes,
+                                    message: `Row(s) affected: ${this.changes}`
+                                }
+                            );
+                            resolve();
+                        } else {
+
+                            callback(
+                                null,
+                                {
+                                    count: this.changes,
+                                    message: `Row(s) affected: ${this.changes}`
+                                }
+                            );
+                            resolve();
+                        }
+                    });
+
+                }
+            } catch (err) {
+                callback(err)
+                resolve()
+            }
+
+        })
+    },
+    allReceipts: async (dtb, callback) => {
+        await tryCreateTables(dtb);
+
+        return new Promise((resolve) => {
+            try {
+                dtb.all('SELECT * FROM receipts;', [], (err, rows) => {
+                    if (err) {
+                        callback(err);
+                        resolve();
+                    } else {
+                        callback(null, rows);
+                        resolve();
+                    }
+                });
+            } catch (err) {
+                callback(err);
+                resolve();
+            }
+        });
+    },
+    /*
+            Receipt Management functions - END
+    */
+
+
 };
 /*
     Public Functions - END

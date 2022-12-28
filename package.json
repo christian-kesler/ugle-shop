@@ -1,5 +1,5 @@
 {
-  "name": "ugle-cart",
+  "name": "ugle-shop",
   "version": "1.0.0",
   "description": "An ecommerce package for NodeJS web apps using SQLite",
   "main": "index.js",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/christian-kesler/ugle-cart.git"
+    "url": "git+https://github.com/christian-kesler/ugle-shop.git"
   },
   "author": "Uglesoft LLC (Christian J Kesler)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/christian-kesler/ugle-cart/issues"
+    "url": "https://github.com/christian-kesler/ugle-shop/issues"
   },
-  "homepage": "https://github.com/christian-kesler/ugle-cart#readme",
+  "homepage": "https://github.com/christian-kesler/ugle-shop#readme",
   "dependencies": {
     "eslint": "^8.29.0",
     "sqlite3": "^5.1.2"
