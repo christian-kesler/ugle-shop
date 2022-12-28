@@ -23,13 +23,13 @@ var err_count = 0;
                 dtb.exec('DROP TABLE IF EXISTS receipts;');
                 resolve(dtb);
             }
-        })
+        });
     });
 })().then(async (dtb) => {
 
 
     // global cart_arr array
-    global.cart_arr = []
+    global.cart_arr = [];
 
 
     // args
@@ -868,7 +868,7 @@ var err_count = 0;
             'qty': 8,
         },
 
-    ]
+    ];
     var removeFromCart_args = [
         // valid input
         {
@@ -977,7 +977,7 @@ var err_count = 0;
             'qty': 8,
         },
 
-    ]
+    ];
     var emptyCart_args = [
         // valid input
         cart_arr,
@@ -1001,8 +1001,8 @@ var err_count = 0;
 
         // absent
 
-    ]
-    checkoutCart_args = [
+    ];
+    var checkoutCart_args = [
         // valid input
         {
             'cart': cart_arr,
@@ -1111,7 +1111,7 @@ var err_count = 0;
             'time': `${new Date}`,
         },
 
-    ]
+    ];
 
     var readReceipt_args = [
         // valid input
@@ -1419,11 +1419,11 @@ var err_count = 0;
             console.log(`[ ] UNEXPECTED FAIL | allProducts | ${err.message}`);
             err_count++;
         } else {
-            console.log(`[X] EXPECTED PASS | allProducts`);
-            console.log(data)
+            console.log('[X] EXPECTED PASS | allProducts');
+            console.log(data);
         }
 
-    })
+    });
 
 
     // addToCart
@@ -1450,7 +1450,7 @@ var err_count = 0;
     }
 
 
-    console.log(cart_arr)
+    console.log(cart_arr);
 
 
     // removeFromCart
@@ -1477,7 +1477,7 @@ var err_count = 0;
     }
 
 
-    console.log(cart_arr)
+    console.log(cart_arr);
 
 
     // addToCart
@@ -1504,7 +1504,7 @@ var err_count = 0;
     }
 
 
-    console.log(cart_arr)
+    console.log(cart_arr);
 
 
     // emptyCart
@@ -1531,7 +1531,7 @@ var err_count = 0;
     }
 
 
-    console.log(cart_arr)
+    console.log(cart_arr);
 
 
     // addToCart
@@ -1558,7 +1558,7 @@ var err_count = 0;
     }
 
 
-    console.log(cart_arr)
+    console.log(cart_arr);
 
 
     // checkoutCart
@@ -1585,7 +1585,7 @@ var err_count = 0;
     }
 
 
-    console.log(cart_arr)
+    console.log(cart_arr);
 
 
     // addToCart
@@ -1612,7 +1612,7 @@ var err_count = 0;
     }
 
 
-    console.log(cart_arr)
+    console.log(cart_arr);
 
 
     // checkoutCart
@@ -1645,10 +1645,10 @@ var err_count = 0;
             console.log(`[ ] UNEXPECTED FAIL | allReceipts | ${err.message}`);
             err_count++;
         } else {
-            console.log(`[X] EXPECTED PASS | allReceipts`);
-            console.log(data)
+            console.log('[X] EXPECTED PASS | allReceipts');
+            console.log(data);
         }
-    })
+    });
 
 
     // confirmReceipt
@@ -1704,14 +1704,14 @@ var err_count = 0;
                     err_count++;
                 } else {
                     console.log(`[X] EXPECTED PASS | readReceipt[${i}]`);
-                    console.log(data)
+                    console.log(data);
                 }
             } else {
                 if (err) {
                     console.log(`[X] EXPECTED FAIL | readReceipt[${i}] | ${err.message}`);
                 } else {
                     console.log(`[ ] UNEXPECTED PASS | readReceipt[${i}]`);
-                    console.log(data)
+                    console.log(data);
                     err_count++;
                 }
             }
@@ -1747,11 +1747,11 @@ var err_count = 0;
             console.log(`[ ] UNEXPECTED FAIL | allProducts | ${err.message}`);
             err_count++;
         } else {
-            console.log(`[X] EXPECTED PASS | allProducts`);
-            console.log(data)
+            console.log('[X] EXPECTED PASS | allProducts');
+            console.log(data);
         }
 
-    })
+    });
 
 
 

@@ -224,16 +224,16 @@ module.exports = {
 
                 const dtb = new sqlite3.Database(path, sqlite3.OPEN_READWRITE, (err) => {
                     if (err) {
-                        callback(err)
+                        callback(err);
                         resolve();
                     } else {
-                        callback(null, dtb)
+                        callback(null, dtb);
                         resolve();
                     }
                 });
 
             } catch (err) {
-                callback(err)
+                callback(err);
                 resolve();
             }
         });
@@ -365,7 +365,7 @@ module.exports = {
 
                 } else {
 
-                    dtb.run(`INSERT INTO products(sku, name, price, description_short, description_long, images, created_at, created_by) VALUES(?, ?, ?, ?, ?, ?, ?, ?);`, [
+                    dtb.run('INSERT INTO products(sku, name, price, description_short, description_long, images, created_at, created_by) VALUES(?, ?, ?, ?, ?, ?, ?, ?);', [
                         args.sku,
                         args.name,
                         args.price,
@@ -418,7 +418,7 @@ module.exports = {
                 } else {
 
                     dtb.all(
-                        `SELECT * FROM products WHERE sku = ?;`,
+                        'SELECT * FROM products WHERE sku = ?;',
                         [sku],
                         (err, rows) => {
                             if (err) {
@@ -495,7 +495,7 @@ module.exports = {
 
                 } else {
 
-                    fields = [
+                    let fields = [
                         'sku',
                         'name',
                         'price',
@@ -504,15 +504,15 @@ module.exports = {
                         'images',
                         'created_at',
                         'created_by'
-                    ]
+                    ];
 
-                    query = null
+                    let query = null;
 
                     fields.forEach(field => {
                         if (args.field == field) {
-                            query = `UPDATE products SET ${args.field} = ? WHERE sku = ?;`
+                            query = `UPDATE products SET ${args.field} = ? WHERE sku = ?;`;
                         }
-                    })
+                    });
 
                     if (query == null) {
                         callback({
@@ -585,7 +585,7 @@ module.exports = {
 
                 } else {
 
-                    dtb.run(`DELETE FROM products WHERE sku = ?;`, [sku], async function (err) {
+                    dtb.run('DELETE FROM products WHERE sku = ?;', [sku], async function (err) {
                         if (err) {
 
                             callback(err);
@@ -716,11 +716,11 @@ module.exports = {
 
                 } else {
 
-                    in_cart = false;
-                    for (i = 0; i < args.cart.length; i++) {
+                    let in_cart = false;
+                    for (let i = 0; i < args.cart.length; i++) {
                         if (args.cart[i].sku == args.sku) {
-                            in_cart = true
-                            args.cart[i].qty += args.qty
+                            in_cart = true;
+                            args.cart[i].qty += args.qty;
                         }
                     }
 
@@ -730,7 +730,7 @@ module.exports = {
 
                     } else {
                         dtb.all(
-                            `SELECT * FROM products WHERE sku = ?;`,
+                            'SELECT * FROM products WHERE sku = ?;',
                             [args.sku],
                             (err, rows) => {
                                 if (err) {
@@ -753,7 +753,7 @@ module.exports = {
                                         'price': rows[0].price,
                                         'qty': args.qty,
 
-                                    })
+                                    });
 
                                     callback(null, args.cart);
                                     resolve();
@@ -764,11 +764,11 @@ module.exports = {
                     }
                 }
             } catch (err) {
-                callback(err)
-                resolve()
+                callback(err);
+                resolve();
             }
 
-        })
+        });
         // (err, cart)
     },
     removeFromCart: async (args, callback) => {
@@ -832,11 +832,11 @@ module.exports = {
 
                 } else {
 
-                    in_cart = false;
-                    for (i = 0; i < args.cart.length; i++) {
+                    let in_cart = false;
+                    for (let i = 0; i < args.cart.length; i++) {
                         if (args.cart[i].sku == args.sku) {
                             in_cart = true;
-                            args.cart[i].qty -= args.qty
+                            args.cart[i].qty -= args.qty;
                             if (args.cart[i].qty == 0) {
                                 args.cart.splice(i, 1);
                             }
@@ -856,11 +856,11 @@ module.exports = {
                     }
                 }
             } catch (err) {
-                callback(err)
-                resolve()
+                callback(err);
+                resolve();
             }
 
-        })
+        });
     },
     emptyCart: async (cart, callback) => {
 
@@ -879,16 +879,16 @@ module.exports = {
                     resolve();
                 } else {
 
-                    cart = []
+                    let cart = [];
 
-                    callback(null, cart)
-                    resolve()
+                    callback(null, cart);
+                    resolve();
                 }
             } catch (err) {
-                callback(err)
-                resolve()
+                callback(err);
+                resolve();
             }
-        })
+        });
     },
     checkoutCart: async (dtb, args, callback) => {
         /* 
@@ -951,12 +951,12 @@ module.exports = {
 
                 } else {
 
-                    total = 0
+                    let total = 0;
                     for (let i = 0; i < args.cart.length; i++) {
-                        total += (args.cart[i].price * args.cart[i].qty)
+                        total += (args.cart[i].price * args.cart[i].qty);
                     }
 
-                    dtb.run(`INSERT INTO receipts(total, cart, status, created_at, created_by) VALUES(?, ?, ?, ?, ?);`, [
+                    dtb.run('INSERT INTO receipts(total, cart, status, created_at, created_by) VALUES(?, ?, ?, ?, ?);', [
                         total,
                         JSON.stringify(args.cart),
                         'pending',
@@ -970,20 +970,20 @@ module.exports = {
 
                         } else {
 
-                            cart = []
+                            let cart = [];
 
-                            callback(null, cart)
-                            resolve()
+                            callback(null, cart);
+                            resolve();
 
                         }
                     });
                 }
             } catch (err) {
-                callback(err)
-                resolve()
+                callback(err);
+                resolve();
             }
 
-        })
+        });
     },
     /*
             Cart Management functions - END
@@ -1053,9 +1053,9 @@ module.exports = {
                         message: 'id is undefined'
                     });
                     resolve();
-                } else if (typeof args.id != 'number') {
+                } else if (typeof args.id != 'number' && typeof args.id != 'string') {
                     callback({
-                        message: `id must be number, received "${typeof args.id}"`
+                        message: `id must be string or number, received "${typeof args.id}"`
                     });
                     resolve();
 
@@ -1118,11 +1118,11 @@ module.exports = {
 
                 }
             } catch (err) {
-                callback(err)
-                resolve()
+                callback(err);
+                resolve();
             }
 
-        })
+        });
     },
     rejectReceipt: async (dtb, args, callback) => {
         /* 
@@ -1152,9 +1152,9 @@ module.exports = {
                         message: 'id is undefined'
                     });
                     resolve();
-                } else if (typeof args.id != 'number') {
+                } else if (typeof args.id != 'number' && typeof args.id != 'string') {
                     callback({
-                        message: `id must be number, received "${typeof args.id}"`
+                        message: `id must be string or number, received "${typeof args.id}"`
                     });
                     resolve();
 
@@ -1217,11 +1217,11 @@ module.exports = {
 
                 }
             } catch (err) {
-                callback(err)
-                resolve()
+                callback(err);
+                resolve();
             }
 
-        })
+        });
     },
     allReceipts: async (dtb, callback) => {
         await tryCreateTables(dtb);
