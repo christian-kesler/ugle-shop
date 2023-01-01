@@ -298,7 +298,7 @@ module.exports = {
                     resolve();
                 } else if (typeof args.price != 'number') {
                     callback({
-                        message: `args.price must be number, received "${typeof args.price}"`
+                        message: `args.price must be number (integer), received "${typeof args.price}"`
                     });
                     resolve();
 
@@ -695,9 +695,9 @@ module.exports = {
                         message: 'qty is undefined'
                     });
                     resolve();
-                } else if (typeof args.qty != 'number') {
+                } else if (!Number.isInteger(args.qty)) {
                     callback({
-                        message: `qty must be number, received "${typeof args.qty}"`
+                        message: `qty must be number (integer), received "${typeof args.qty} (integer = ${Number.isInteger(args.qty)})"`
                     });
                     resolve();
 
@@ -811,9 +811,9 @@ module.exports = {
                         message: 'qty is undefined'
                     });
                     resolve();
-                } else if (typeof args.qty != 'number') {
+                } else if (!Number.isInteger(args.qty)) {
                     callback({
-                        message: `qty must be number, received "${typeof args.qty}"`
+                        message: `qty must be number (integer), received "${typeof args.qty} (integer = ${Number.isInteger(args.qty)})"`
                     });
                     resolve();
 
@@ -861,6 +861,122 @@ module.exports = {
             }
 
         });
+    },
+    setCartQty: async (dtb, args, callback) => {
+        /* 
+            args = {
+                'sku':987654321,
+                'qty':1,
+                'cart':cart_obj
+            }
+        */
+        return new Promise((resolve) => {
+            try {
+
+                if (args === undefined) {
+                    callback({
+                        message: 'args is undefined'
+                    });
+                    resolve();
+                } else if (typeof args != 'object') {
+                    callback({
+                        message: `args must be object, received "${typeof args}"`
+                    });
+                    resolve();
+
+
+                } else if (args.sku === undefined) {
+                    callback({
+                        message: 'sku is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.sku != 'string' && typeof args.sku != 'number') {
+                    callback({
+                        message: `args.sku must be string or number, received "${typeof args.sku}"`
+                    });
+                    resolve();
+
+
+                } else if (args.qty === undefined) {
+                    callback({
+                        message: 'qty is undefined'
+                    });
+                    resolve();
+                } else if (!Number.isInteger(args.qty)) {
+                    callback({
+                        message: `qty must be number (integer), received "${typeof args.qty} (integer = ${Number.isInteger(args.qty)})"`
+                    });
+                    resolve();
+
+
+                } else if (args.cart === undefined) {
+                    callback({
+                        message: 'cart is undefined'
+                    });
+                    resolve();
+                } else if (typeof args.cart != 'object' || !Array.isArray(args.cart)) {
+                    callback({
+                        message: `cart must be array object, received "${typeof args.cart}" (array = ${Array.isArray(args.cart)})`
+                    });
+                    resolve();
+
+
+                } else {
+
+                    let in_cart = false;
+                    for (let i = 0; i < args.cart.length; i++) {
+                        if (args.cart[i].sku == args.sku) {
+                            in_cart = true;
+                            args.cart[i].qty = args.qty;
+                        }
+                    }
+
+                    if (in_cart) {
+                        callback(null, args.cart);
+                        resolve();
+
+                    } else {
+                        dtb.all(
+                            'SELECT * FROM products WHERE sku = ?;',
+                            [args.sku],
+                            (err, rows) => {
+                                if (err) {
+
+                                    callback(err);
+                                    resolve();
+
+                                } else if (rows.length == 0) {
+
+                                    callback({
+                                        message: 'product not found'
+                                    });
+                                    resolve();
+
+                                } else {
+
+                                    args.cart.push({
+                                        'sku': rows[0].sku,
+                                        'name': rows[0].name,
+                                        'price': rows[0].price,
+                                        'qty': args.qty,
+
+                                    });
+
+                                    callback(null, args.cart);
+                                    resolve();
+
+                                }
+                            }
+                        );
+                    }
+                }
+            } catch (err) {
+                callback(err);
+                resolve();
+            }
+
+        });
+        // (err, cart)
     },
     emptyCart: async (cart, callback) => {
 

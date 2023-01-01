@@ -772,6 +772,17 @@ var err_count = 0;
             'qty': 4,
             'cart': cart_arr,
         },
+        {
+            'sku': '2468',
+            'qty': 8,
+            'cart': cart_arr,
+        },
+        {
+            'sku': 123456,
+            'qty': 4,
+            'cart': cart_arr,
+        },
+
         // strings
         {
             'sku': '2468',
@@ -789,6 +800,22 @@ var err_count = 0;
             'sku': '2468',
             'qty': 8,
             'cart': 8,
+        },
+        // floats
+        {
+            'sku': 6516.546,
+            'qty': 8,
+            'cart': cart_arr,
+        },
+        {
+            'sku': '2468',
+            'qty': 8.45,
+            'cart': cart_arr,
+        },
+        {
+            'sku': '2468',
+            'qty': 8,
+            'cart': 9841.58,
         },
 
         // objects
@@ -898,6 +925,160 @@ var err_count = 0;
             'sku': '2468',
             'qty': 8,
             'cart': 8,
+        },
+
+        // floats
+        {
+            'sku': 6516.546,
+            'qty': 8,
+            'cart': cart_arr,
+        },
+        {
+            'sku': '2468',
+            'qty': 8.45,
+            'cart': cart_arr,
+        },
+        {
+            'sku': '2468',
+            'qty': 8,
+            'cart': 9841.58,
+        },
+
+        // objects
+        {
+            'sku': {},
+            'qty': 8,
+            'cart': [],
+        },
+        {
+            'sku': 123456,
+            'qty': {},
+            'cart': [],
+        },
+        {
+            'sku': '2468',
+            'qty': 8,
+            'cart': {},
+        },
+
+        // arrays
+        {
+            'sku': [],
+            'qty': 8,
+            'cart': [],
+        },
+        {
+            'sku': 123456,
+            'qty': [],
+            'cart': [],
+        },
+
+        // null
+        {
+            'sku': null,
+            'qty': 8,
+            'cart': [],
+        },
+        {
+            'sku': 123456,
+            'qty': null,
+            'cart': [],
+        },
+        {
+            'sku': '2468',
+            'qty': 8,
+            'cart': null,
+        },
+
+        // undefined
+        {
+            'sku': undefined,
+            'qty': 8,
+            'cart': [],
+        },
+        {
+            'sku': 123456,
+            'qty': undefined,
+            'cart': [],
+        },
+        {
+            'sku': '2468',
+            'qty': 8,
+            'cart': undefined,
+        },
+
+        // absent
+        {
+            'qty': 8,
+            'cart': [],
+        },
+        {
+            'sku': 123456,
+            'cart': [],
+        },
+        {
+            'sku': '2468',
+            'qty': 8,
+        },
+
+    ];
+    var setCartQty_args = [
+        // valid input
+        {
+            'sku': '2468',
+            'qty': 8,
+            'cart': cart_arr,
+        },
+        {
+            'sku': 123456,
+            'qty': 4,
+            'cart': cart_arr,
+        },
+        {
+            'sku': '2468',
+            'qty': 8,
+            'cart': cart_arr,
+        },
+        {
+            'sku': 123456,
+            'qty': 4,
+            'cart': cart_arr,
+        },
+
+        // strings
+        {
+            'sku': '2468',
+            'qty': '8',
+            'cart': [],
+        },
+        {
+            'sku': 123456,
+            'qty': 4,
+            'cart': '[]',
+        },
+
+        // integers
+        {
+            'sku': '2468',
+            'qty': 8,
+            'cart': 8,
+        },
+
+        // floats
+        {
+            'sku': 6516.546,
+            'qty': 8,
+            'cart': cart_arr,
+        },
+        {
+            'sku': '2468',
+            'qty': 8.45,
+            'cart': cart_arr,
+        },
+        {
+            'sku': '2468',
+            'qty': 8,
+            'cart': 9841.58,
         },
 
         // objects
@@ -1429,7 +1610,7 @@ var err_count = 0;
     // addToCart
     for (let i = 0; i < addToCart_args.length; i++) {
         await ugle_shop.addToCart(dtb, addToCart_args[i], (err, cart) => {
-            if (i <= 1) {
+            if (i <= 3) {
                 if (err) {
                     console.log(`[ ] UNEXPECTED FAIL | addToCart[${i}] | ${err.message}`);
                     err_count++;
@@ -1450,7 +1631,7 @@ var err_count = 0;
     }
 
 
-    console.log(cart_arr);
+    // console.log(cart_arr);
 
 
     // removeFromCart
@@ -1477,25 +1658,25 @@ var err_count = 0;
     }
 
 
-    console.log(cart_arr);
+    // console.log(cart_arr);
 
 
-    // addToCart
-    for (let i = 0; i < addToCart_args.length; i++) {
-        await ugle_shop.addToCart(dtb, addToCart_args[i], (err, cart) => {
-            if (i <= 1) {
+    // setCartQty
+    for (let i = 0; i < setCartQty_args.length; i++) {
+        await ugle_shop.setCartQty(dtb, setCartQty_args[i], (err, cart) => {
+            if (i <= 3) {
                 if (err) {
-                    console.log(`[ ] UNEXPECTED FAIL | addToCart[${i}] | ${err.message}`);
+                    console.log(`[ ] UNEXPECTED FAIL | setCartQty[${i}] | ${err.message}`);
                     err_count++;
                 } else {
-                    console.log(`[X] EXPECTED PASS | addToCart[${i}] | ${JSON.stringify(cart)}`);
+                    console.log(`[X] EXPECTED PASS | setCartQty[${i}] | ${JSON.stringify(cart)}`);
                     cart_arr = cart;
                 }
             } else {
                 if (err) {
-                    console.log(`[X] EXPECTED FAIL | addToCart[${i}] | ${err.message}`);
+                    console.log(`[X] EXPECTED FAIL | setCartQty[${i}] | ${err.message}`);
                 } else {
-                    console.log(`[ ] UNEXPECTED PASS | addToCart[${i}] | ${JSON.stringify(cart)}`);
+                    console.log(`[ ] UNEXPECTED PASS | setCartQty[${i}] | ${JSON.stringify(cart)}`);
                     err_count++;
                     cart_arr = cart;
                 }
@@ -1531,13 +1712,13 @@ var err_count = 0;
     }
 
 
-    console.log(cart_arr);
+    // console.log(cart_arr);
 
 
     // addToCart
     for (let i = 0; i < addToCart_args.length; i++) {
         await ugle_shop.addToCart(dtb, addToCart_args[i], (err, cart) => {
-            if (i <= 1) {
+            if (i <= 3) {
                 if (err) {
                     console.log(`[ ] UNEXPECTED FAIL | addToCart[${i}] | ${err.message}`);
                     err_count++;
@@ -1558,7 +1739,7 @@ var err_count = 0;
     }
 
 
-    console.log(cart_arr);
+    // console.log(cart_arr);
 
 
     // checkoutCart
@@ -1585,13 +1766,13 @@ var err_count = 0;
     }
 
 
-    console.log(cart_arr);
+    // console.log(cart_arr);
 
 
     // addToCart
     for (let i = 0; i < addToCart_args.length; i++) {
         await ugle_shop.addToCart(dtb, addToCart_args[i], (err, cart) => {
-            if (i <= 1) {
+            if (i <= 3) {
                 if (err) {
                     console.log(`[ ] UNEXPECTED FAIL | addToCart[${i}] | ${err.message}`);
                     err_count++;
@@ -1612,7 +1793,7 @@ var err_count = 0;
     }
 
 
-    console.log(cart_arr);
+    // console.log(cart_arr);
 
 
     // checkoutCart
