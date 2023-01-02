@@ -120,6 +120,18 @@ You will probably be able to use this package with older or newer versions than 
             cart - [array object]
 
 
+    setCartQty
+        dtb - [object], database connection
+        args - [object]
+            sku - [string || number]
+            qty - [number]
+            cart - [array object]
+        callback - [function]
+            err - [object] null if function is successful
+                message - [string] describes the error that occured
+            cart - [array object]
+
+
     emptyCart
         dtb - [object], database connection
         cart - [array object]
