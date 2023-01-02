@@ -1,5 +1,5 @@
 {
-  "name": "@ugle-soft/ugle-shop",
+  "name": "@uglesoftllc/ugle-shop",
   "version": "1.0.1",
   "description": "An ecommerce package for NodeJS web apps using SQLite",
   "main": "index.js",
